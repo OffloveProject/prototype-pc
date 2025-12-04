@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Offstage Love Prototype - Access</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .box { border: 1px solid #ccc; padding: 2em; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+    input { padding: 0.5em; font-size: 1em; width: 200px; }
+    button { margin-top: 1em; padding: 0.5em 1em; font-size: 1em; cursor: pointer; }
+    #msg { color: red; margin-top: 0.5em; }
+  </style>
+    <link rel="stylesheet" href="style-pc.css" />
+</head>
+<body>
+  <div class="box">
+      <div class="title-logo">Offstage Love</div>
+      <div class="subtitle">〜秘密の恋と夢のはざまで〜</div>
+      <div class="version"><em>Prototype</em></div>
 
+    <h2>プロトタイプ閲覧用</h2>
+    <p>パスワードを入力してください：</p>
+    <input type="password" id="pw" placeholder="Password">
+    <br>
+    <button onclick="checkPw()">Enter</button>
+    <p id="msg"></p>
+      <footer>
+      <small>&copy; 2025 Offstage Love Project</small>
+      </footer>
+  </div>
+
+
+
+  <script>
+    function checkPw() {
+      const input = document.getElementById("pw").value;
+      const correct = "ol-ma2025"; // ← 共通パスワード
+      if (input === correct) {
+        window.location.href = "proto_pc-r7ux9.html"; // ← ランダム文字列に変更
+      } else {
+        document.getElementById("msg").textContent = "パスワードが違います。";
+      }
+    }
+
+    // ★ Enterキーでも送信できるようにする
+    document.getElementById("pw").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        checkPw();
+      }
+    });
+
+</script>
+</body>
+</html>

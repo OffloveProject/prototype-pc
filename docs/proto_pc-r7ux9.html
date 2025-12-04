@@ -1,0 +1,2849 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Offstage Love – Mini Proto</title>
+<link rel="stylesheet" href="style-pc.css" />
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<div class="app">
+  <header>Offstage Love – Mini Proto</header>
+
+<!-- Splash (catch copy) -->
+<div id="splash" class="splash">
+  <div class="splash-inner">音で、恋する。</div>
+</div>
+
+<!-- Start Screen (tap to enter) ↓↓↓ここから-->
+<div id="start-screen" class="start-screen">
+  <div class="sky">
+    <div class="stars"></div>
+    <div class="twinkle"></div>
+    <div class="aurora"></div>
+  </div>
+
+  <div class="notes" id="notes-layer" aria-hidden="true"></div>
+
+  <div class="start-inner">
+      <div class="romantic-title">
+        <div class="start-title">Offstage Love</div>
+        <div class="start-sub">秘密の恋と夢のはざまで</div>
+        <div id="tap-to-start" class="tap">Tap to Start</div>
+        <div class="hint">press any key</div>
+    </div>
+    </div>
+</div>
+<!-- Start Screen (tap to enter) ↑↑↑ここまで-->
+
+  <!-- ===== Title ===== -->
+  <main id="page-title">
+    <div class="phone-viewport">   <!-- 追加（開く） -->
+      <div id="title-bg" class="title-bg"></div>  <!-- ← 追加（背景ランダム切替用） -->
+        <div class="card title-card title-line" style="text-align:center; padding:0px;">
+          <div class="logo-glow"></div>
+          <img src="assets/title/logo/offstagelove_logo_1.png" alt="Offstage Love" class="logo-img">
+          <div class="logo-ribbon"></div>
+          <div class="version" style="margin:0px;"><em>Prototype</em></div>
+        </div>
+
+        <button id="btn-continue" class="btn title-line">Continue</button>
+        <button id="btn-new" class="btn title-line">New Game</button>
+
+        <!-- Album row -->
+        <div class="row title-line">
+          <button id="btn-album" class="btn">📸Album</button>
+        </div>
+
+        <div class="row title-line">
+          <button id="btn-settings" class="btn title-btn-ghost" title="Settings">⚙<br><span>Settings</span></button>
+          <button id="btn-about" class="btn title-btn-ghost" title="About & Legal">ℹ️<br><span>About</span></button>
+          <button id="btn-tracks" class="btn title-btn-ghost" title="Musics">🎵<br><span>Musics</span></button>
+          <button id="btn-nft" class="btn title-btn-ghost" title="NFT">🪙<br><span>NFT</span></button>
+        </div>
+
+        <!-- Quick Actions: ポイント購入 / 機種変更 / お問い合わせ -->
+          <div class="quick-actions title-line" id="quick-actions">
+            <button id="qa-shop"     class="qa-btn">💎 ポイント<br>購入</button>
+            <button id="qa-transfer" class="qa-btn">🔁 機種変更</button>
+            <button id="qa-contact"  class="qa-btn">✉ お問い合わせ</button>
+          </div>
+
+        <!-- Title の下部装飾 -->
+        <div id="title-footer-deco" class="title-footer-deco"></div>
+
+          <!-- プレースホルダ用 “共通” モーダル -->
+          <div id="qa-modal" class="modal hidden" aria-hidden="true" style="position:fixed;">
+            <div class="modal-card">
+              <h3 id="qa-title" class="modal-title">準備中</h3>
+              <div id="qa-body"  class="modal-body">
+                ※この機能はプロトタイプではガワのみです。
+              </div>
+              <div class="row" style="margin-top:12px;">
+                <button id="qa-close" class="btn" style="width:100%;">閉じる</button>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="card">
+          <div style="margin:0 0 6px 0; font-weight:700;">Paste <code>script_json</code> here　※プロト版のみ</div>
+          <textarea id="script-input"></textarea>
+          <div class="row">
+            <button id="btn-load" class="btn">Load</button>
+            <button id="btn-fill" class="btn">Fill sample</button>
+          </div>
+          <div id="load-msg" class="subtitle"></div>
+          <div class="subtitle">保存キー: <span class="mono">localStorage["offlove_save_v1"]</span></div>
+        </div>
+    </div>    <!-- 追加（閉じる） -->
+  </main>
+
+  <!-- ======== モーダル群ここから ======== -->
+
+  <!-- ===== Log (Backlog) ===== -->
+  <div id="log-modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 style="margin-top:0;">Backlog</h3>
+      <div id="log-list" class="list" style="max-height:50vh; overflow:auto;"></div>
+      <div class="row" style="margin-top:12px;">
+        <button id="btn-log-close" class="btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Album (Seen Stills) ===== -->
+  <div id="album-modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 style="margin-top:0;">Album</h3>
+      <div id="album-list" class="list" style="max-height:50vh; overflow:auto;"></div>
+      <div class="row" style="margin-top:12px;">
+        <button id="btn-album-close" class="btn">閉じる</button>
+      </div>
+      <div class="subtitle">※プロトタイプ：表示済みスチルの一覧（縮小画像は省略）</div>
+    </div>
+  </div>
+
+  <!-- ===== Settings ===== -->
+  <main id="page-settings" class="hidden">
+    <div class="card">
+      <h2 style="margin:0 0 8px 0;">Settings</h2>
+      <div class="form">
+        <label>主人公の名字</label>
+        <input id="inp-family" type="text" inputmode="text" />
+        <label>主人公の名前</label>
+        <input id="inp-given" type="text" inputmode="text" />
+        <div class="subtitle">※初期値：橘 萌香（あとでいつでも変更可能）</div>
+
+        <label>文字サイズ</label>
+          <select id="sel-fontsize">
+            <option value="s">小 (S)</option>
+            <option value="m" selected>標準 (M)</option>
+            <option value="l">大 (L)</option>
+            <option value="xl">特大 (XL)</option>
+          </select>
+
+          <!-- ▼ テーマ（ライト/ダーク/自動） -->
+          <label>テーマ</label>
+          <select id="sel-theme">
+            <option value="auto">自動（OS設定に追従）</option>
+            <option value="dark">ダーク</option>
+            <option value="light">ライト</option>
+          </select>
+
+          <!-- ▼ テキストスピード -->
+          <label>テキストスピード</label>
+          <select id="sel-textspeed">
+            <option value="instant">即時</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="slow">ゆっくり</option>
+          </select>
+
+      </div>
+      <div class="row">
+        <button id="btn-cancel-settings" class="btn btn-ghost">戻る</button>
+        <button id="btn-save-settings" class="btn">保存</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Scene ===== -->
+  <main id="page-scene" class="hidden">
+    <div class="scene">
+
+       <!-- 右上メニューボタン -->
+        <button id="btn-menu" class="menu-btn" title="メニュー">≡</button>
+
+        <!-- メインメニュー -->
+        <div id="mainmenu-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Main Menu</h3>
+            <div class="list">
+              <button id="mnu-status" class="btn">Status</button>
+              <button id="mnu-save"   class="btn">Save</button>
+              <button id="mnu-load"   class="btn">Load</button>
+              <button id="mnu-log"    class="btn">Log</button>
+              <button id="mnu-opt"    class="btn">Option</button>
+              <button id="mnu-help"   class="btn">Help</button>
+              <button id="mnu-title"  class="btn">Title</button>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <button id="btn-menu-close" class="btn">閉じる</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div id="status-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Status</h3>
+            <div id="status-body"></div>
+            <div class="row" style="margin-top:12px;">
+              <button class="btn" onclick="el('status-modal').classList.add('hidden')">閉じる</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Option（環境設定ガワ） -->
+        <div id="option-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Option</h3>
+            <div class="form">
+              <label>テキストスピード</label>
+              <select id="opt-type">
+                <option value="instant">即時</option>
+                <option value="normal" selected>ふつう</option>
+                <option value="slow">ゆっくり</option>
+              </select>
+              <label>BGM音量</label><input type="range" min="0" max="5" value="3">
+              <label>ボイス音量</label><input type="range" min="0" max="5" value="3">
+              <label>SE音量</label><input type="range" min="0" max="5" value="3">
+              <!-- 「<input type="range" min="0" max="5" value="3" disabled>」ならdisabledにできる -->
+              ※プロト版の音量スライダーはガワのみ
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <button class="btn btn-ghost" onclick="el('option-modal').classList.add('hidden')">戻る</button>
+              <button id="btn-option-save" class="btn">保存</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help（静的） -->
+        <div id="help-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Help</h3>
+            <div class="list">
+              <div class="list-item"><strong>◀️：</strong><span class="meta">前のシーンへ戻る</span></div>
+              <div class="list-item"><strong>画面タップ、または「次へ」ボタン：</strong><span class="meta">次のシーンへ進む</span></div>
+              <div class="list-item"><strong>⏩早送り：</strong><span class="meta">押している間はテキスト一括表示（プロト版ではガワのみ）</span></div>
+              <div class="list-item"><strong>▶️AUTO：</strong><span class="meta">自動で進行</span></div>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <button class="btn" onclick="el('help-modal').classList.add('hidden')">閉じる</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- タイトルへ戻る確認モーダル -->
+        <div id="home-confirm" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">タイトル画面に戻りますか？</h3>
+            <p class="subtitle">進行状況は自動保存されています。（プロト版はオートセーブ未実装）</p>
+            <div class="row" style="margin-top:12px;">
+              <button id="btn-home-no"  class="btn btn-ghost">いいえ</button>
+              <button id="btn-home-yes" class="btn">はい</button>
+            </div>
+          </div>
+        </div>
+
+       <div id="bg" class="bg"></div>
+      <div class="char"><img id="char-img" alt=""></div>
+
+      <div id="hud" class="hud">
+        <div id="aff-debug"></div> <!-- デバッグ用好感度表示 -->
+      </div>
+
+      <div class="textbox">
+          <div id="name" class="name"></div>
+          <div id="text" class="text"></div>
+          <div id="choices" class="choice hidden"></div>
+          <button id="btn-backline" class="btn-mini">◀️</button>
+          <button id="btn-confirm" class="btn-confirm hidden" disabled>決定</button>
+          <div class="nav-mini">
+            <button id="btn-ff"   class="btn-mini" title="早送り(プロト版はガワのみ)">⏩</button>
+            <button id="btn-auto" class="btn-mini" title="AUTO">▶️</button>
+            <button id="btn-go"   class="btn-mini" title="次へ">➡️</button>
+          </div>
+        </div>
+    </div>
+  </main>
+
+  <!-- ===== Result ===== -->
+  <main id="page-result" class="hidden">
+  <div class="card result-card">
+    <div id="result-title" class="result-title">結果【…】</div>
+    <div id="result-text"  class="result-text">……</div>
+  </div>
+
+  <div class="card">
+    <div class="result-label">あなたが告白した相手</div>
+    <div id="result-target" class="result-target">—</div>
+  </div>
+
+  <div class="card">
+    <div class="result-label">好感度一覧</div>
+    <div id="result-aff-list" class="result-aff">
+      <!-- 例）
+      陽翔:0
+      司:2
+      -->
+    </div>
+  </div>
+
+  <button id="btn-back" class="btn">タイトルへ</button>
+</main>
+
+</div>
+
+<!-- セーブデータ表示メニュー↓↓↓ここから -->
+
+        <!-- Save -->
+        <div id="save-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Save</h3>セーブするスロットを選択してください。
+
+              <div id="save-list" class="list"></div>
+              <div class="row" style="margin-top:12px;">
+                <button class="btn" onclick="el('save-modal').classList.add('hidden')">閉じる</button>
+              </div>
+          </div>
+        </div>
+
+        <!-- Load -->
+        <div id="load-modal" class="modal hidden">
+          <div class="modal-card">
+            <h3 style="margin-top:0;">Load</h3>ロードするデータを選択してください。
+
+            <div id="load-list" class="list"></div>
+            <div class="row" style="margin-top:12px;">
+              <button class="btn" onclick="el('load-modal').classList.add('hidden')">閉じる</button>
+             </div>
+          </div>
+        </div>
+
+<!-- セーブデータ表示メニュー↑↑↑ここまで -->
+
+
+<!-- 「About/Legal」メニュー -->
+
+<div id="about-modal" class="modal hidden">
+  <div class="modal-card">
+    <h3 style="margin-top:0;">About & Legal</h3>
+    <div class="modal-body">
+      <div class="subtitle" id="app-version">Version: v0.1.0 (Demo)</div>
+      <hr/>
+      <p><strong>作品名：</strong>Offstage Love　〜秘密の恋と夢のはざまで〜</p>
+      <p><strong>開発：</strong>Offstage Love Project</p>
+      <p><strong>連絡先：</strong><a href="mailto:info@offstagelove.com">info@offstagelove.com</a></p>
+      <p><strong>公式サイト：</strong>
+        <a href="https://offstagelove.com" target="_blank" rel="noopener">
+          https://offstagelove.com
+        </a>
+      </p>
+      <hr/>
+      <p><strong>データの扱い：</strong>本プロトタイプではブラウザの <code>localStorage</code> のみを使用し、個人データをサーバに送信しません。</p>
+      <p class="subtitle">※Analytics等を導入する場合は、その旨と目的・取得項目・オプトアウト方法をここに明記（現在は未導入）</p>
+      <hr/>
+      <p><a id="link-privacy" href="https://offstagelove.com/app/privacypolicy.html" target="_blank" rel="noopener">プライバシーポリシー</a></p>
+      <p><a id="link-tos" href="https://offstagelove.com/app/termsofservice.html" target="_blank" rel="noopener">利用規約</a></p>
+      <div class="row" style="margin-top:12px;">
+        <button id="btn-about-close" class="btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 楽曲リスト↓↓↓ここから -->
+<div id="tracks-modal" class="modal hidden">
+  <div class="modal-card tracks-card">
+    <h3 style="margin-top:0;">楽曲リスト</h3>
+
+    <!-- 上部：ジャケット風ヘッダー -->
+    <div class="tracks-header">
+      <div class="tracks-cover"></div>
+      <div class="tracks-meta">
+        <div class="tracks-title-main">Offstage Love – Original Tracks</div>
+        <div class="tracks-sub">※プロトタイプではガワのみ</div>
+      </div>
+    </div>
+
+    <!-- 波紋アニメ ＋ 曲番号（自動採番）↓↓↓ここから -->
+    <div class="tracks-player">
+      <div class="tracks-player-text">
+        <div id="np-title" class="np-title">Value of Stars</div>
+        <div id="np-artist" class="np-artist">CELEST</div>
+      </div>
+
+      <div class="tracks-player-seek">
+        <span id="np-time-current" class="np-time np-time-current">0:00</span>
+        <input id="np-seek" type="range" min="0" max="100" value="0">
+        <span id="np-time-total" class="np-time np-time-total">3:08</span>
+      </div>
+
+      <div class="tracks-player-controls">
+        <button id="np-prev"  class="np-btn" aria-label="前の曲へ">⏪</button>
+        <button id="np-toggle" class="np-btn np-btn-main" aria-label="再生／一時停止">❚❚</button>
+        <button id="np-next"  class="np-btn" aria-label="次の曲へ">⏩</button>
+
+        <div class="np-volume">
+          <span class="np-vol-icon">🔊</span>
+          <input id="np-volume" type="range" min="0" max="100" value="30">
+        </div>
+      </div>
+    </div>
+    <!-- 波紋アニメ ＋ 曲番号（自動採番）↑↑↑ここまで -->
+
+    <!-- メイン再生・再生モードボタン -->
+    <div class="tracks-main-controls">
+      <div class="trk-mode-buttons">
+
+        <!-- <button class="trk-mode-btn" data-mode="normal">▶ 再生</button> -->
+        <button class="trk-mode-btn" data-mode="shuffle">🔀Shuffle</button>
+        <button class="trk-mode-btn" data-mode="one">🔁Repeat One</button>
+        <button class="trk-mode-btn" data-mode="all">🔂Repeat All</button>
+      </div>
+    </div>
+
+    <!-- 楽曲リスト本体 -->
+    <div id="tracks-list" class="tracks-list"></div>
+
+    <div class="row" style="margin-top:16px;">
+      <button id="btn-tracks-close" class="btn" style="width:100%;">閉じる</button>
+    </div>
+  </div>
+</div>
+<!-- 楽曲リスト↑↑↑ここまで -->
+
+<!-- NFT -->
+<div id="nft-modal" class="modal hidden">
+  <div class="modal-card">
+    <h3 style="margin-top:0;">NFT</h3>
+    <p class="subtitle">※プロトタイプではガワのみ。<br>※本番用ではOpenSea連携で所有NFTを表示<br>（本アプリ内にはウォレット機能を搭載せず、閲覧のみ可能）</p>
+    <div class="card" style="margin-top:8px;">
+      <p><strong>コレクション：</strong><span id="nft-collection-name">Offstage Love – CELEST Cards</span></p>
+      <p><strong>公開URL：</strong><a id="nft-link" style="pointer-events: none;" href="#" target="_blank" rel="noopener">準備中</a></p>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btn-nft-close" class="btn">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- Start Character Select (debug only) -->
+<div id="start-modal" class="modal hidden">
+  <div class="modal-card">
+    <h3 style="margin-top:0;">開始キャラを選んでください（デバッグ用）</h3>
+    <div class="row" style="margin-top:8px; gap:8px;">
+      <button id="btn-start-haruto" class="btn">陽翔から始める</button>
+      <button id="btn-start-tsukasa" class="btn">司から始める</button>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btn-start-cancel" class="btn btn-ghost">キャンセル</button>
+    </div>
+    <div class="subtitle">※本番ではこの選択は表示しません（確認用）</div>
+  </div>
+</div>
+
+        <!-- 汎用確認モーダル（ネイティブダイアログ立ち上げ回避策）↓↓↓ここから -->
+        <div id="sys-confirm" class="modal hidden">
+          <div class="modal-card">
+            <p id="sys-confirm-message" style="margin-top:0;"></p>
+            <div class="row" style="margin-top:12px;">
+              <button id="sys-confirm-no"  class="btn btn-ghost">キャンセル</button>
+              <button id="sys-confirm-yes" class="btn">はい</button>
+            </div>
+          </div>
+        </div>
+        <!-- 汎用確認モーダル（ネイティブダイアログ立ち上げ回避策）↑↑↑ここまで -->
+
+
+<script>
+
+/** =========================
+ *  Continue 全セーブスロットが空ならグレーアウト
+ *  ========================= */
+
+// どこか1か所で使っている保存キーの接頭辞に合わせてください
+const SAVE_PREFIX = "offlove_slot_";
+
+function hasAnySave() {
+  // ローカルストレージに1つでもセーブがあれば true
+  return Object.keys(localStorage).some(k => k.startsWith(SAVE_PREFIX));
+}
+
+function updateContinueButton() {
+  const btn = document.getElementById("btn-continue");
+  if (!btn) return;
+  const enabled = hasAnySave();
+  btn.disabled = !enabled;
+  btn.classList.toggle("disabled", !enabled); // セーブデータが1つもなければ見た目のグレーアウト
+}
+
+
+
+
+/** =========================
+ *  Constants / Utilities
+ *  ========================= */
+
+// Loadモーダルを開いた発火元: "ingame" | "title"
+let loadInvokeFrom = "ingame"; //ゲームプレイ中とメインメニューで「セーブデータをロードしますか？」のメッセージを出し分けるため
+
+const SAVE_KEY = "offlove_save_v1";
+const PROFILE_KEY = "offlove_profile_v1"; // 主人公の名前保存
+const el = (id) => document.getElementById(id);
+
+// 汎用確認モーダル↓↓↓ここから
+function showConfirm(message, onYes, onNo) {
+  const modal = el("sys-confirm");
+  const msgEl = el("sys-confirm-message");
+  const yesBtn = el("sys-confirm-yes");
+  const noBtn  = el("sys-confirm-no");
+
+  msgEl.textContent = message;
+  modal.classList.remove("hidden");
+
+  const cleanup = () => {
+    modal.classList.add("hidden");
+    yesBtn.removeEventListener("click", handleYes);
+    noBtn.removeEventListener("click", handleNo);
+  };
+
+  function handleYes() {
+    cleanup();
+    if (onYes) onYes();
+  }
+  function handleNo() {
+    cleanup();
+    if (onNo) onNo();
+  }
+
+  yesBtn.addEventListener("click", handleYes);
+  noBtn.addEventListener("click", handleNo);
+}
+// 汎用確認モーダル↑↑↑ここまで
+
+const pages = {
+  title: el("page-title"),
+  settings: el("page-settings"),
+  scene: el("page-scene"),
+  result: el("page-result")
+};
+function showPage(key) {
+  for (const k of Object.keys(pages)) {
+    pages[k].classList.toggle("hidden", k !== key);
+  }
+  // ★ scene 以外に出たらAUTOはOFF
+  if (key !== "scene") {
+    try { setAuto(false); } catch(_) {}
+  }
+  if (key === "title") {
+    updateContinueButton(); // ← スロットの有無でcontinueボタンのdisabledを更新
+    setTitleBG(); // ← 追加：タイトル表示ごとに背景をランダム更新
+  }
+}
+
+// タイトル画面で三枚の背景画像を切替↓↓↓ここから
+// タイトル背景：候補からランダムにセット（直前と同じは避ける）
+function setTitleBG() {
+  const bgEl = document.getElementById("title-bg");
+  if (!bgEl) return;
+
+  // 画像は好きに増やせます。拡張子は実ファイルに合わせて。
+  const pool = [
+    "assets/title/bg/studio.png",
+    "assets/title/bg/hand.png",
+    "assets/title/bg/music.png"
+  ];
+
+  // 直前のインデックスを避ける（sessionStorageに記憶）
+  const prev = Number(sessionStorage.getItem("title_bg_idx"));
+  let idx = Math.floor(Math.random() * pool.length);
+  if (pool.length > 1 && idx === prev) {
+    idx = (idx + 1) % pool.length;
+  }
+  sessionStorage.setItem("title_bg_idx", String(idx));
+
+  // フェード切替
+  bgEl.style.opacity = "0";
+  const url = `url("${pool[idx]}")`;
+  // ちょっと遅らせてフェード
+  setTimeout(() => {
+    bgEl.style.backgroundImage = url;
+    bgEl.style.opacity = "1";
+  }, 80);
+}
+// タイトル画面で三枚の背景画像を切替↑↑↑ここまで
+
+// ==== Title Footer Deco ==== ↓↓↓ここから
+(function(){
+  const deco = document.getElementById("title-footer-deco");
+  if (!deco) return;
+
+  const chars = ["★","☆","♪","♫","♡","♩","🎸","🎶","🎧","💛","❤","💙","💚","💜","💕"]; // 天体・音楽・乙女
+  const colors = ["#F09199","#FFD6E0","#FFF","#C8E4FF","#FCE3B7"];
+
+  function spawn(){
+    const el = document.createElement("span");
+    el.textContent = chars[Math.floor(Math.random()*chars.length)];
+    el.style.left = Math.random()*90 + "%";
+    el.style.color = colors[Math.floor(Math.random()*colors.length)];
+    el.style.fontSize = (14 + Math.random()*12) + "px";
+    el.style.animationDuration = (4 + Math.random()*3) + "s";
+    deco.appendChild(el);
+    setTimeout(()=> el.remove(), 8000);
+  }
+
+  setInterval(spawn, 400); // 0.9秒ごとに一つ生成
+})();
+// ==== Title Footer Deco ==== ↑↑↑ここまで
+
+/** =========================
+ *  Player Profile (主人公名)
+ *  ========================= */
+const defaultProfile = { family: "橘", given: "萌香" };
+const profile = loadProfile();
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    if (!raw) return { ...defaultProfile };
+    const p = JSON.parse(raw);
+    return {
+      family: (p && p.family) ? String(p.family) : defaultProfile.family,
+      given:  (p && p.given)  ? String(p.given)  : defaultProfile.given
+    };
+  } catch {
+    return { ...defaultProfile };
+  }
+}
+function saveProfile() {
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+/** =========================
+ *  View Settings（文字サイズ）
+ *  ========================= */
+const SETTINGS_KEY = "offlove_settings_v1";
+const defaultSettings = {
+  fontSize: "m", // s/m/l/xl
+  theme: "auto",         // auto/dark/light
+  textSpeed: "normal"    // instant/normal/slow
+ };
+
+ let settings = loadSettings();
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return { ...defaultSettings };
+    const st = JSON.parse(raw);
+    return {
+      fontSize: st?.fontSize ?? defaultSettings.fontSize,
+      theme:    st?.theme    ?? defaultSettings.theme,
+      textSpeed:st?.textSpeed?? defaultSettings.textSpeed 
+     };
+  } catch {
+    return { ...defaultSettings };
+  }
+}
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+// テーマ適用：<html> に theme-◯◯ を付与（auto のときは OS を見る）
+function applyTheme() {
+  const root = document.documentElement;
+  root.classList.remove("theme-dark","theme-light");
+  let mode = settings.theme;
+  if (mode === "auto") {
+    const prefersDark = window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    mode = prefersDark ? "dark" : "light";
+  }
+  root.classList.add(`theme-${mode}`);
+}
+
+// フォントサイズ適用（既存）
+function applyFontSize() {
+  // ルート要素にサイズ別クラスを付与
+  const root = document.documentElement; // <html>
+  root.classList.remove("fs-s","fs-m","fs-l","fs-xl");
+  root.classList.add(`fs-${settings.fontSize}`);
+}
+// 起動時に適用
+applyFontSize();
+applyTheme();
+
+// OSテーマ変更を監視（auto時のみ反映）
+if (window.matchMedia) {
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  mq.addEventListener?.("change", () => {
+    if (settings.theme === "auto") applyTheme();
+  });
+}
+
+/** =========================
+ *  Game State & Save
+ *  ========================= */
+const state = {
+  sceneId: "prologue_studio",
+  cursor: 0,
+  vars: {},
+  log: [],
+  history: [],             // 追加：テキスト履歴 [{type:'say'|'narrate', ch?, txt}]
+  seenStills: [],          // 追加：表示済みスチル ["haruto:kiss01", ...]
+  affection: { haruto: 0, tsukasa: 0 },
+  script: null,
+  undoStack: [],                // 追加：巻き戻し用
+  backLockAt: null,              // 追加: 境界（選択直後の1行）を覚える
+  affFine: { haruto: 0, tsukasa: 0 }   // 次の♥までの％（0〜100）
+};
+
+function resetState() {
+  state.sceneId = "prologue_studio";
+  state.cursor = 0;
+  state.vars = {};
+  state.log = [];
+  state.history = [];      // 追加：テキスト履歴
+  state.seenStills = [];   // 追加：表示済みスチル
+  state.affection = { haruto: 0, tsukasa: 0 };
+  state.undoStack = [];        // 追加：巻き戻し用
+  state.backLockAt = null;   // 追加：選択直後の1行だけ戻る不可
+  state.affFine = { haruto: 0, tsukasa: 0 }; // 次の♥まで％ を先に初期化
+  updateAffDebug();         // ← その後に描画（更新）
+
+}
+function save() {
+  try {
+    const payload = {
+      sceneId: state.sceneId,
+      cursor: state.cursor,
+      vars: state.vars,
+      log: state.log,
+      history: state.history,         // 追加：テキスト履歴
+      seenStills: state.seenStills,   // 追加：表示済みスチル
+      affection: state.affection,
+      undoStack: state.undoStack,        // 追加：巻き戻し用
+      backLockAt: state.backLockAt,   // 追加：選択直後の1行だけ戻る不可
+      affFine: state.affFine          // 次の♥までの％（0〜100）を管理
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+  } catch (e) {
+    console.warn("save failed", e);
+  }
+}
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s || typeof s !== 'object' || typeof s.sceneId !== 'string') return null;
+    state.sceneId = s.sceneId;
+    state.cursor = Number.isFinite(s.cursor) ? s.cursor : 0;
+    state.vars = s.vars || {};
+    state.log = Array.isArray(s.log) ? s.log : [];
+    state.history = Array.isArray(s.history) ? s.history : [];         // 追加：テキスト履歴
+    state.affFine    = s.affFine    || { haruto: 0, tsukasa: 0 };    // 次の♥までの％（0〜100）を管理
+
+    // --- 履歴の主人公表記を現在の“名前のみ”へ移行（ロード時に一度だけ） ---
+    const mcName = profile.given;
+    state.history = (state.history || []).map(h => {
+      if (!h || h.type !== "say") return h;
+      const isMCLine =
+        h.mc === true || h.ch === "主人公" || h.ch === `${profile.family} ${profile.given}`;
+      return isMCLine ? { ...h, ch: mcName, mc: true } : h;
+    });
+
+    state.seenStills = Array.isArray(s.seenStills) ? s.seenStills : []; // 追加：表示済みスチル
+    state.affection = s.affection || { haruto: 0, tsukasa: 0 };
+    state.undoStack = Array.isArray(s.undoStack) ? s.undoStack : []; // 追加：巻き戻し用
+    state.backLockAt = (typeof s.backLockAt === "number") ? s.backLockAt : null; // 追加：選択直後の1行だけ戻る不可
+    return s;
+  } catch (e) {
+    console.warn("load failed", e);
+    localStorage.removeItem(SAVE_KEY);
+    return null;
+  }
+}
+
+// 「次へ」ボタンが無くても落ちないようにクリックリスナーの安全化
+const _btnNextEl = el("btn-next");
+if (_btnNextEl) _btnNextEl.addEventListener("click", next);
+
+// 右上メニュー開閉（モーダル中はタップ無効ガード有り）
+el("btn-menu").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.remove("hidden");
+  document.body.classList.add('modal-open');
+});
+el("btn-menu-close").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+});
+
+// 各メニュー
+el("mnu-log").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+  renderLog(); el("log-modal").classList.remove("hidden");
+});
+
+// Option（タイプ速度のみ保存・反映）
+el("mnu-opt").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+  // 既存設定を反映（だいたいのマッピング）
+  el("opt-type").value = settings.textSpeed;
+  el("option-modal").classList.remove("hidden");
+});
+el("btn-option-save").addEventListener("click", ()=>{
+  settings.textSpeed = el("opt-type").value;
+  saveSettings();
+  el("option-modal").classList.add("hidden");
+});
+
+// Help
+el("mnu-help").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+  el("help-modal").classList.remove("hidden");
+});
+
+// Title（既存の確認モーダルを再利用）
+el("mnu-title").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+  el("home-confirm").classList.remove("hidden");
+});
+// タイトルへ戻る確認モーダルのハンドラ
+el("btn-home-no").addEventListener("click", () => {
+  el("home-confirm").classList.add("hidden");
+});
+el("btn-home-yes").addEventListener("click", () => {
+  save(); // 自動保存
+  el("home-confirm").classList.add("hidden");
+  showPage("title"); // タイトルへ戻る
+});
+
+
+/* Status ↓↓↓ここから*/
+// Status（動的レンダリング）
+
+let statusPage = 0;        // 0:基本情報, 1:好感度(HT)
+const STATUS_PAGE_TOTAL = 2;
+
+const HEARTS = [
+  { key:"haruto",  label:"神谷 陽翔" },
+  { key:"koh",     label:"水無月 煌" },
+  { key:"ryoya",   label:"天羽 涼弥" },
+  { key:"rei",     label:"氷堂 怜" },
+  { key:"tsukasa", label:"九条 司" }
+];
+/* 好感度ページ設定↓↓↓ここから*/
+// Statusと同じロジックをHUD用にも返す共通UI（デバッグ用好感度表示）↓↓↓ここから
+
+function heartMeterFor(key){         // key: "haruto" | "tsukasa" | ほか
+  // 実値（整数♥と部分％）→ 表示用 0〜100 に合成
+  const int  = (state.affection?.[key] ?? 0);    // 0..4（ベース♥はUI側で＋1）
+  const fine = (state.affFine?.[key] ?? 0);      // 0..100（次の♥までの％）
+  const pct  = Math.max(0, Math.min(100, int * 20 + Math.round(fine * 0.2)));
+
+  const isMax = (pct === 100);
+  const filledCount = Math.min(5, 1 + Math.floor(pct / 20)); // 最低♥1
+
+  const hearts = Array.from({length:5}, (_,i)=>
+    `<span class="${i < filledCount ? 'filled' : 'empty'}">♥</span>`
+  ).join("");
+
+  return `
+    <div class="ht-wrap ${isMax ? 'max' : ''}">
+      <div class="ht-hearts ${key}">${hearts}</div>
+    </div>
+  `;  //♥のみ表示
+}
+// Statusと同じロジックをHUD用にも返す共通UI（デバッグ用好感度表示）↑↑↑ここまで
+// progress: 0-100 / variant: "haruto" | "tsukasa" | undefined
+function heartsUI(progress, variant){
+  const pct = Math.max(0, Math.min(100, progress || 0));
+
+  // ★最低1個は点灯（リクエストどおり）
+  const baseHearts   = 1;
+  const heartsFromPct= Math.floor(pct / 20);        // 0..5
+  const filledCount  = Math.min(5, baseHearts + heartsFromPct);
+
+  const hearts = Array.from({length:5}, (_,i)=>
+    `<span class="${i<filledCount?'filled':'empty'}">♥</span>`
+  ).join("");
+
+  const isMax   = (pct === 100);
+  const stepPct = (pct === 100) ? 100 : Math.round((pct % 20) / 20 * 100); // バーは段階内%にするならこれ（0〜100）
+  // 段階外の総合%表示のままが良ければ上を pct に戻してください
+
+  return `
+    <div class="ht-wrap ${isMax ? 'max' : ''}">
+      <div class="ht-hearts ${variant ? variant : ''}">${hearts}</div>
+      <div class="ht-bar">
+        <div class="fill" data-w="${stepPct}"></div>
+        <div class="label">${isMax ? "" : `${stepPct}%`}</div>
+      </div>
+    </div>`;
+}
+/* 好感度ページ設定↑↑↑ここまで*/
+
+function renderStatus(){
+  const dateStr = state.vars.gameTime || "1年目　春　3週目　水曜日　朝　快晴"; // 仮
+  const mcFull  = `${profile.family} ${profile.given}`;
+
+  // 5人分の好感は Haruto/Tsukasa以外は0%のガワ↓↓↓ここから
+  // 5人分の好感は Haruto/Tsukasa は実値×20、他はデモ用の見た目値
+  const affPct = (key)=> {
+    // haruto/tsukasa は ♥整数＋％ を合成した表示用 0..100 を返す
+    if (key === "haruto" || key === "tsukasa") return affPctKey(key);
+    // 他メンバーはデモ値のまま
+    const clamp = n => Math.max(0, Math.min(100, n|0));
+    const demo = { koh: 35, ryoya: 100, rei: 60 };
+    return clamp(demo[key] ?? 0);
+  };
+  
+  // 5人分の好感は Haruto/Tsukasa以外は0%のガワ↑↑↑ここまで
+
+  const htList = HEARTS.map(h=>{
+    const name = renderNameLabel(h.label); // 例: 神谷 陽翔 <span class="kana">- カミヤ ハルト -</span>
+    return `
+      <div class="card" style="padding:10px; margin-top:8px;">
+        <div style="font-weight:700;">💖${name}</div>
+        <div>${heartsUI(
+                affPct(h.key),
+                  h.key // ← 全員の key をそのまま variant として渡す
+              )}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const box = el("status-body");
+  box.innerHTML = "";
+
+  // ページャ（上）
+  box.appendChild(buildPager(
+    statusPage, STATUS_PAGE_TOTAL,
+    ()=>{ if(statusPage>0){ statusPage--; renderStatus(); } },
+    ()=>{ if(statusPage<STATUS_PAGE_TOTAL-1){ statusPage++; renderStatus(); } }
+  ));
+
+  // ページごとの中身
+  if (statusPage === 0) {
+    // ---- 1ページ目：基本情報 ----
+    box.insertAdjacentHTML("beforeend", `
+      <div class="card"><strong>■日時</strong><div class="subtitle">${dateStr}</div></div>
+      <div class="card" style="margin-top:8px;">
+        <strong>■主人公の名前</strong><div class="subtitle">${mcFull}</div>
+      </div>
+      <div class="card" style="margin-top:8px;">
+        <strong>■主人公のステータス</strong>
+        <div class="meta">（プロト版ではガワのみ）</div>
+        <div class="list" style="margin-top:6px;">
+          <div class="list-item"><strong>LV　3</strong><div class="meta">【Level】XPが基準値に達すると上昇する職務スキル</div></div>
+          <div class="list-item"><strong>XP　200</strong><div class="meta">【Experience Points】仕事に関わる経験を積むと獲得</div></div>
+          <div class="list-item"><strong>ST　10</strong><div class="meta">【Stamina】休日の活動内容に応じて消費</div></div>
+          <div class="list-item"><strong>FT　0</strong><div class="meta">【Fatigue】XPの獲得速度に応じて蓄積</div></div>
+        </div>
+      </div>
+    `);
+  } else {
+    // ---- 2ページ目：好感度（HT） ----
+    box.insertAdjacentHTML("beforeend", `
+      <div class="card"><strong>■【Heart】好感度（HT）</strong><div class="meta">（タップでプロフィール表示、プロト版では未実装）</div>${htList}</div>
+    `);
+  }
+
+  // 進捗バーのアニメ（width 0 → data-w%）
+  box.querySelectorAll(".ht-bar .fill").forEach(el=>{
+    const w = el.getAttribute("data-w") || "0";
+    // 2フレーム遅延で確実にトランジション
+    el.style.width = "0%";
+    requestAnimationFrame(()=> requestAnimationFrame(()=> el.style.width = w + "%"));
+  });
+
+  // ページャ（下）
+  box.appendChild(buildPager(
+    statusPage, STATUS_PAGE_TOTAL,
+    ()=>{ if(statusPage>0){ statusPage--; renderStatus(); } },
+    ()=>{ if(statusPage<STATUS_PAGE_TOTAL-1){ statusPage++; renderStatus(); } }
+  ));
+}
+
+el("mnu-status").addEventListener("click", ()=>{
+  el("mainmenu-modal").classList.add("hidden");
+  statusPage = 0;           // ★ 追記：毎回1ページ目から
+  renderStatus();
+  el("status-modal").classList.remove("hidden");
+});
+/* Status ↑↑↑ここまで*/
+
+//Save / Load（ローカルストレージ・簡易スロット実装）
+//仕様： 50スロット（1–50）、UIは確認ポップアップのみ。実装を軽くするためオートセーブ10枠の仕組みは後日。
+const SLOT_PREFIX = "offlove_slot_"; // 例: offlove_slot_3
+const MANUAL_TOTAL = 40;
+const AUTO_TOTAL   = 10;
+const SLOTS_PER_PAGE = 10;
+
+let saveMode = "manual"; // "manual" | "auto"
+let loadMode = "manual"; // "manual" | "auto"
+let savePage = 0; // 0-based
+let loadPage = 0; // 0-based
+
+function saveToSlot(slot){
+  const payload = {
+    savedAt: Date.now(),
+    state: {
+      sceneId: state.sceneId, cursor: state.cursor,
+      vars: state.vars, log: state.log, history: state.history,
+      seenStills: state.seenStills, affection: state.affection
+    },
+    profile, settings
+  };
+  localStorage.setItem(SLOT_PREFIX+slot, JSON.stringify(payload));
+}
+
+//保存有無の判定ヘルパ↓↓↓ここから
+function hasManualSlot(slot){
+  return !!localStorage.getItem(SLOT_PREFIX + slot);
+}
+//保存有無の判定ヘルパ↑↑↑ここまで
+
+//JSON がおかしい等の本当のバグはコンソールエラーとしてそのまま見えるようにするための処理↓↓↓ここから
+function loadFromSlot(slot) {
+  const raw = localStorage.getItem(SLOT_PREFIX + slot);
+  if (!raw) {
+    // セーブデータが存在しない → ロード失敗
+    return false;
+  }
+
+  const s = JSON.parse(raw);
+
+  // 必要最低限を復元（ここでは画面描画（showPage("scene"); setBG(); renderCurrent();）はしない）
+  Object.assign(state,    s.state    || {});
+  Object.assign(profile,  s.profile  || profile);
+  Object.assign(settings, s.settings || settings);
+
+  // プロフィール・設定は永続化
+  saveProfile();
+  saveSettings();
+
+  // ここまで来ればロード成功
+  return true;
+}
+//JSON がおかしい等の本当のバグはコンソールエラーとしてそのまま見えるようにするための処理↑↑↑ここまで
+
+function slotLabel(slot){
+  const raw = localStorage.getItem(SLOT_PREFIX+slot);
+  if(!raw) return `スロットNo.${slot}（空）`;
+  try{
+    const s = JSON.parse(raw); const d = new Date(s.savedAt||Date.now());
+    const ts = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,"0")}`;
+    return `スロットNo.${slot}（${ts}）`;
+  }catch{ return `スロットNo.${slot}`; }
+}
+
+//セーブデータ（ページ切替機能付き）↓↓↓ここから
+
+
+// ▼ ラベル生成（見た目だけでOK）
+function slotLabelBy(mode, index1){ // index1: 1始まり
+  if (mode === "manual") {
+    const raw = localStorage.getItem(SLOT_PREFIX + index1);
+    if (!raw) return `No.${String(index1).padStart(2,"0")}（空）`;
+    try{
+      const s = JSON.parse(raw); 
+      const d = new Date(s.savedAt || Date.now());
+      const ts = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      return `No.${String(index1).padStart(2,"0")}（${ts}）`;
+    }catch{
+      return `No.${String(index1).padStart(2,"0")}`;
+    }
+  } else {
+    // オートはダミー表示（ガワだけ）
+    return `【AUTO】No.${String(index1).padStart(2,"0")}（自動）`;
+  }
+}
+
+// ▼ ページャ（共通関数。両方から使えるようにグローバルに置く）↓↓↓ここから
+
+function buildPager(current, totalPages, onPrev, onNext){
+  const nav = document.createElement("div");
+  nav.className = "row";
+  nav.style.margin = "12px 0";
+  nav.innerHTML = `
+    <button class="btn" ${current<=0?"disabled":""}>⬅️</button>
+    <div style="flex:1;text-align:center;">Page ${current+1} / ${totalPages}</div>
+    <button class="btn" ${current>=totalPages-1?"disabled":""}>➡️</button>
+  `;
+  const buttons = nav.querySelectorAll("button");
+  const btnPrev = buttons[0];
+  const btnNext = buttons[1];
+  btnPrev.addEventListener("click", onPrev);
+  btnNext.addEventListener("click", onNext);
+  return nav;
+}
+
+// ▼ ページャ（共通関数。両方から使えるようにグローバルに置く）↑↑↑ここまで
+
+// ▼ Save（ページャ付き）↓↓↓ここから
+function renderSaveList(){
+  const box = el("save-list");
+  box.innerHTML = "";
+
+  const total = (saveMode==="manual") ? MANUAL_TOTAL : AUTO_TOTAL;
+  const start = savePage * SLOTS_PER_PAGE;
+  const end   = Math.min(start + SLOTS_PER_PAGE, total);
+  const pageCount = Math.max(1, Math.ceil(total / SLOTS_PER_PAGE));
+
+  // 上部ページャ
+  box.appendChild(buildPager(
+    savePage, pageCount,
+    ()=>{ if(savePage>0){ savePage--; renderSaveList(); } },
+    ()=>{ if(savePage<pageCount-1){ savePage++; renderSaveList(); } }
+  ));
+
+  // セーブスロットリスト
+
+  for (let i = start + 1; i <= end; i++) {
+  const has = hasManualSlot(i);
+  const div = document.createElement("div");
+  div.className = "list-item";
+  div.innerHTML = `
+    <div class="row" style="align-items:center; gap:8px;">
+      <div style="flex:1;">
+        <strong>${slotLabelBy(saveMode, i)}</strong>
+        <div class="meta">${saveMode==="manual" ? "クリックでこのスロットに保存します" : "（AUTO枠：保存操作不可／見た目のみ）"}</div>
+      </div>
+      ${saveMode==="manual" && has ? `<button class="btn-del" data-del="${i}">削除</button>` : ""}
+    </div>
+  `;
+
+  if (saveMode === "manual") {
+    // セーブ実行（本体はガワのままなら時間だけ更新）
+    div.addEventListener("click", (e) => {
+      // 削除ボタンのクリックは拾わない
+      if (e.target.closest("button[data-del]")) return;
+        showConfirm(
+          `スロット No.${i} にセーブしますか？`,
+          () => {
+          const payload = { savedAt: Date.now(), state:{}, profile, settings };
+          localStorage.setItem(SLOT_PREFIX+i, JSON.stringify(payload));
+          renderSaveList();
+          updateContinueButton(); // ← Save リストの保存直後にContinueボタンのアクティブ/非アクティブ更新
+        }
+      );
+  });
+
+    // 削除ボタン
+    const delBtn = div.querySelector('button[data-del]');
+    if (delBtn) {
+      delBtn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+          showConfirm(
+            `スロット No.${i} のセーブデータを削除しますか？`,
+              () => {
+              localStorage.removeItem(SLOT_PREFIX+i);
+            renderSaveList();
+            updateContinueButton(); // ← Save リストの削除直後にContinueボタンのアクティブ/非アクティブ更新
+          }
+        )
+      });
+    }
+  }
+  box.appendChild(div);
+}
+
+
+  // 下部ページャ
+  box.appendChild(buildPager(
+    savePage, pageCount,
+    ()=>{ if(savePage>0){ savePage--; renderSaveList(); } },
+    ()=>{ if(savePage<pageCount-1){ savePage++; renderSaveList(); } }
+  ));
+}
+// ▼ Save（ページャ付き）↑↑↑ここまで
+
+// ▼ Load（ページャ付き）↓↓↓ここから
+// ▼ Load（5ページ目はAUTOのガワを表示）
+function renderLoadList(){
+  const box = el("load-list");
+  box.innerHTML = "";
+
+  // Loadは常に5ページ表示（1〜4=手動40枠、5=オート10枠のダミー）
+  const pageCount = 5;
+  const isAutoPage = (loadPage === 4);           // 0始まり → 4 が5ページ目
+  const total = isAutoPage ? AUTO_TOTAL : MANUAL_TOTAL;
+
+  // 手動ページは 0..3 を 10件ずつ、AUTOページは常に 1..10
+  const start = isAutoPage ? 0 : loadPage * SLOTS_PER_PAGE;
+  const end   = Math.min(start + SLOTS_PER_PAGE, total);
+
+  // ラベル用のモードもここで切替（AUTOページのみ【AUTO】表示）
+  const mode = isAutoPage ? "auto" : "manual";
+
+  // 上部ページャ
+  box.appendChild(buildPager(
+    loadPage, pageCount,
+    ()=>{ if(loadPage>0){ loadPage--; renderLoadList(); } },
+    ()=>{ if(loadPage<pageCount-1){ loadPage++; renderLoadList(); } }
+  ));
+
+  // スロット
+
+  for (let i = start + 1; i <= end; i++) {
+  const isAuto = isAutoPage;
+  const slotNo = i; // 手動時の実スロット番号
+  const has = !isAuto && hasManualSlot(slotNo);
+
+  // ラベル番号：手動は通し（01〜40）、AUTOページ 41〜50
+  const labelNo = isAutoPage ? (40 + i - start) : i;
+
+  // メタ表示用テキスト
+  const metaText = isAuto
+    ? "（AUTO枠：プロトタイプではロード操作不可／見た目のみ）"
+    : (has ? "クリックでロード" : "セーブデータなし");
+
+  const div = document.createElement("div");
+  div.className = "list-item";
+  if (!has && !isAuto) {
+    // 手動ページの空スロットは「無効」扱いにする
+    div.classList.add("slot-empty");
+  }
+
+  div.innerHTML = `
+    <div class="row" style="align-items:center; gap:8px;">
+      <div style="flex:1;">
+        <strong>${slotLabelBy(mode, labelNo)}</strong>
+        <div class="meta">${metaText}</div>
+      </div>
+      ${(!isAuto && has) ? `<button class="btn-del" data-del="${slotNo}">削除</button>` : ""}
+    </div>
+  `;
+
+// クリックでロード（手動ページのみ）
+  if (!isAutoPage && has) {
+    div.addEventListener("click", (e)=>{
+      if (e.target.closest("button[data-del]")) return; // 削除ボタンは除外
+
+       const msg = (loadInvokeFrom === "title")
+      ? `スロット No.${slotNo} をロードしますか？`
+      : `スロット No.${slotNo} をロードしますか？\n※現在の進行状況は失われます。`;
+
+        showConfirm(
+          msg, () => {
+            const ok = loadFromSlot(slotNo);
+            el("load-modal").classList.add("hidden");
+            loadInvokeFrom = "ingame"; // ★ リセット（次回のため）
+            if (ok) {
+              showPage("scene");
+              setBG();
+              renderCurrent();
+            } else {
+              // ここもネイティブ alert を避けたいなら別モーダル化する
+              alert("ロードに失敗しました。");
+              }  
+            },
+          () => {   // No（キャンセル）のとき
+            // 何もしない（必要ならここに処理を書く）
+          }
+      );
+
+    });
+
+    // 削除ボタン
+    const delBtn = div.querySelector('button[data-del]');
+    if (delBtn) {
+      delBtn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+          showConfirm(
+            `スロット No.${slotNo} のセーブデータを削除しますか？`,
+            () => {
+            localStorage.removeItem(SLOT_PREFIX+slotNo);
+            renderLoadList();
+            updateContinueButton(); // ← Load リストの保存直後にContinueボタンのアクティブ/非アクティブ更新
+          }
+        );
+      });
+    }
+  }
+
+  box.appendChild(div);
+}
+
+
+  // 下部ページャ
+  box.appendChild(buildPager(
+    loadPage, pageCount,
+    ()=>{ if(loadPage>0){ loadPage--; renderLoadList(); } },
+    ()=>{ if(loadPage<pageCount-1){ loadPage++; renderLoadList(); } }
+  ));
+}
+
+// ▼ Load（ページャ付き）↑↑↑ここから
+
+//セーブデータ（ページ切替機能付き）↑↑↑ここまで
+
+//タブ非依存のリスナ　↓↓↓ここから
+// ---- Save/Load を確実に開く共通関数 ----
+function openSaveModal() {
+  saveMode = "manual";
+  savePage = 0;
+  try { renderSaveList(); } catch(e) { console.warn(e); }
+  const m = el("save-modal");
+  if (m) m.classList.remove("hidden");
+}
+
+function openLoadModal(from = "ingame") {   // ← 引数を追加
+  loadInvokeFrom = from;                    // ★ ここで「セーブデータをロードしますか？」メッセージ出し分けの状況を記録
+  loadMode = "manual";
+  loadPage = 0;
+  try { renderLoadList(); } catch(e) { console.warn(e); }
+  const m = el("load-modal");
+  if (m) m.classList.remove("hidden"); // ★ 表示させる（.hidden を外す処理）
+}
+
+// ---- メニューのハンドラ（ここを置き換え）----
+el("mnu-save").addEventListener("click", () => {
+  el("mainmenu-modal").classList.add("hidden");
+  // 1フレーム遅らせて確実にモーダルを表示
+  requestAnimationFrame(openSaveModal);
+});
+el("mnu-load").addEventListener("click", () => {
+  el("mainmenu-modal").classList.add("hidden");
+  requestAnimationFrame(() => openLoadModal("ingame"));  // ← "ingame" を渡す
+});
+
+//タブ非依存のリスナ　↑↑↑ここまで
+
+//↑↑↑Save / Load（ローカルストレージ・簡易スロット実装）ここまで
+
+// 指定シーンからゲーム開始（共通処理）※Proto Only
+function startGameAt(sceneId) {
+  resetState();
+  state.sceneId = sceneId; // ここで開始シーンを指定
+  save();
+  if (!parseScript()) { alert("先に script_json を Load してください。"); return; }
+  showPage("scene");
+  setBG();
+  renderCurrent();
+}
+
+// 置き換え（New Game ボタン）
+el("btn-new").addEventListener("click", () => {
+  if (!parseScript()) { alert("先に script_json を Load してください。"); return; }
+  startGameAt("prologue_studio"); // ← いきなり陽翔から開始
+});
+
+/** =========================
+ *  Script JSON
+ *  ========================= */
+let script_json = ""; // user pastes here
+function parseScript() {
+  try {
+    const data = JSON.parse(script_json);
+    if (!data || !Array.isArray(data.scenes)) throw new Error("Invalid script format");
+    state.script = data;
+    return true;
+  } catch (e) {
+    state.script = null;
+    return false;
+  }
+}
+function findScene(id) {
+  if (!state.script) return null;
+  return state.script.scenes.find(s => s.id === id) || null;
+}
+
+/** =========================
+ *  Rendering helpers
+ *  ========================= */
+// 攻略キャラのふりがなマップ（必要に応じて追加可能）
+const FURIGANA = {
+  "陽翔": "ハルト",
+  "煌": "コウ",
+  "涼弥": "リョウヤ",
+  "怜": "レイ",
+  "司": "ツカサ",
+  "神谷 陽翔": "カミヤ ハルト",
+  "水無月 煌": "ミナヅキ コウ",
+  "天羽 涼弥": "アマハネ リョウヤ",
+  "氷堂 怜": "ヒョウドウ レイ",
+  "九条 司": "クジョウ ツカサ"
+};
+function renderNameLabel(ch) {
+  // 主人公はふりがな不要、かつ表示名をプレイヤー名に置換
+  if (ch === "主人公") {
+    return `${profile.family} ${profile.given}`;
+  }
+  // 攻略キャラは「漢字 -カナ-」表記（cssでスタイル付与）
+  if (FURIGANA[ch]) {
+    const kana = FURIGANA[ch];
+    return `${ch} <span class="kana">- ${kana} -</span>`;
+  }
+  // それ以外は素の表示
+  return ch || "";
+}
+
+// 主人公名プレースホルダを現在設定に展開
+function resolveInlineVars(s) {
+  return String(s || "")
+    .replaceAll("{MC}", profile.given)                              // 名前のみ
+    .replaceAll("{MC_FULL}", `${profile.family} ${profile.given}`)  // 姓 + 名
+    .replaceAll("{MC_FAMILY}", profile.family);                     // 姓のみ
+}
+
+//背景画像をassets/bg/bg_<sceneId>.png で統一的に読み込む
+function setBG() {
+  const bg = el("bg");
+  const url = `assets/bg/bg_${state.sceneId}.png`;
+  bg.style.backgroundImage = `url("${url}")`;
+}
+
+// キャラ名 → ファイル名用キーのマッピング
+// キャラ名 → ファイル名用キー（JSONの表記に合わせて“名前のみ”でマップ）
+const CHAR_MAP = {
+  "陽翔": "haruto",
+  "煌": "koh",
+  "涼弥": "ryoya",
+  "怜": "rei",
+  "司": "tsukasa",
+  // フルネームで出る台本も想定するなら予備マップを足してOK:
+  "神谷 陽翔": "haruto",
+  "水無月 煌": "koh",
+  "天羽 涼弥": "ryoya",
+  "氷堂 怜": "rei",
+  "九条 司": "tsukasa"
+};
+
+// 立ち絵（standing）＆イベントCG（event）対応の読込
+function setChar(ch, emo) {
+  const img = el("char-img");
+  // 主人公は立ち絵なし（必要ならここで差し替え）
+  if (!ch || ch === "主人公") { img.src = ""; img.alt = ""; return; }
+
+  // 台本上の表記（陽翔 / 司 / …）→ 英数字キー（haruto / tsukasa / …）
+  const key = CHAR_MAP[ch] || ch; // 未定義ならそのまま（デバッグ用）
+
+  let src = "";
+
+  if (typeof emo === "string" && emo.startsWith("event:")) {
+    // イベントCG：emo に "event:kiss01" のように書く
+    const slug = emo.slice("event:".length).trim();
+    src = `assets/celest/${key}/event/${slug}.png`;
+
+      // ▼ スチルが表示されたらアルバム登録（重複回避）
+        const tag = `${key}:${slug}`;
+        if (!state.seenStills.includes(tag)) {
+          state.seenStills.push(tag);
+          save();
+        }
+
+} else {
+    // 立ち絵：emo が無ければ normal を使う
+    const pose = emo || "normal";
+    src = `assets/celest/${key}/standing/${pose}.png`;
+  }
+
+  img.src = src;
+  img.alt = `${ch} ${emo || "normal"}`;
+}
+
+function updateHUD(pulse = false) {
+  // 左上の新UI（♥＋％）を描画
+  updateAffDebug();
+
+  // パルス演出は従来どおり
+  const hud = document.getElementById("hud");
+  if (pulse && hud) {
+    hud.classList.remove("pulse");
+    void hud.offsetWidth;
+    hud.classList.add("pulse");
+  }
+}
+
+function flashBG() {
+  const bg = el("bg");
+  bg.style.opacity = "0.6";
+  setTimeout(()=> bg.style.opacity = "1", 100);
+}
+
+// 好感度実値（整数♥と部分％）→ 表示用 0〜100 に合成
+function affPctKey(key){
+  const int  = (state.affection?.[key] ?? 0);   // 0..4 （ベース♥1はheartsUI側で付与）
+  const fine = (state.affFine?.[key] ?? 0);     // 0..100（次の♥までの％）
+  const total = int * 20 + Math.round(fine * 0.2); // 例：♥2＋50% → 40 + 10 = 50
+  return Math.max(0, Math.min(100, total));
+}
+
+// 左上デバッグ好感度（陽翔/司）を更新↓↓↓ここから
+function updateAffDebug(){
+  const wrap = document.getElementById("aff-debug");
+  if(!wrap) return;
+
+  const harutoUI  = heartMeterFor("haruto");   // Status と同じ関数を利用
+  const tsukasaUI = heartMeterFor("tsukasa");
+
+  wrap.innerHTML = `
+    <div class="dbg-title">💖好感度デバッグ用<br>（プロト版のみ）</div>
+    <div class="row"><div class="who">陽翔</div>${harutoUI}</div>
+    <div class="row"><div class="who">司</div>${tsukasaUI}</div>
+  `;
+
+  // Status と同じく「バーを data-w% までアニメさせる」処理を実行
+  wrap.querySelectorAll(".ht-bar .fill").forEach(el=>{
+    const w = el.getAttribute("data-w") || "0";
+    el.style.width = "0%";
+    requestAnimationFrame(()=> 
+      requestAnimationFrame(()=> el.style.width = w + "%")
+    );
+  });
+}
+// 左上デバッグ好感度（陽翔/司）を更新↑↑↑ここまで
+
+
+// ------- Typewriter --------
+let tw = { timer: 0, running: false, full: "", i: 0 };
+function textSpeedMs() {
+  switch (settings.textSpeed) {
+    case "instant": return 0;
+    case "slow":    return 35;
+    default:        return 20; // normal
+  }
+}
+function startTypewriter(targetEl, fullText) {
+  clearInterval(tw.timer);
+  const withBreaks = fullText.replace(/\n/g, "<br>");  // 改行を <br> に変換
+  tw = { timer: 0, running: true, full: withBreaks, i: 0 }; // ← fullをwithBreaksに
+  const step = textSpeedMs();
+  if (step === 0) {
+    targetEl.innerHTML = withBreaks;  // ← innerHTMLに直接出力
+    tw.running = false;
+    setNextButtonLabel(); // 通常ラベルへ
+    return;
+  }
+  targetEl.textContent = "";
+  setSkipButtonLabel(); // スキップ可能表示
+  tw.timer = setInterval(() => {
+    if (tw.i >= tw.full.length) {
+      clearInterval(tw.timer);
+      tw.running = false;
+      setNextButtonLabel();
+      return;
+    }
+    tw.i++;
+    targetEl.innerHTML = tw.full.slice(0, tw.i); // innerHTML で出力
+  }, step);
+}
+function skipTypewriterIfRunning(targetEl) {
+  if (!tw.running) return false;
+  clearInterval(tw.timer);
+  targetEl.innerHTML = tw.full;  // ← innerHTML を使う
+  tw.running = false;
+  setNextButtonLabel();
+  return true;
+}
+
+//ラベル切替関数の対応　タイプライタの「▶︎ スキップ／次へ」ラベル切替は #btn-next 前提なので、#btn-go も対象に
+function setSkipButtonLabel(){
+  const b = el("btn-next") || el("btn-go");
+  if (b) b.textContent = "▶︎ スキップ";
+}
+function setNextButtonLabel(){
+  const b = el("btn-next") || el("btn-go");
+  if (b) b.textContent = "次へ";
+}
+
+//JS：モーダル開いてたら進行しないガード↓↓↓ここから
+// いずれかのモーダルが開いているか？
+function anyModalOpen(){
+  return !!document.querySelector('.modal:not(.hidden)');
+}
+
+// 進行ユーティリティ（次へ）
+function advance(){
+  // ★モーダル表示中は進行しない
+  if (anyModalOpen()) return;
+  // 選択肢表示中は無効
+  if(!el("choices").classList.contains("hidden")) return;
+  next(); // 既存の進行ロジックを利用
+}
+
+// --- モーダル状態を自動同期：開いていれば modal-open を付与、全部閉じれば除去 ---
+(function modalOpenSync(){
+  function sync(){
+    const hasOpen = !!document.querySelector('.modal:not(.hidden)');
+    document.body.classList.toggle('modal-open', hasOpen);
+  }
+  // 初期 & 監視
+  sync();
+  const obs = new MutationObserver(sync);
+  obs.observe(document.body, { subtree:true, attributes:true, attributeFilter:['class'] });
+
+  // まれなケースの保険（描画タイミング差異）
+  window.addEventListener('focus', sync);
+})();
+
+//JS：モーダル開いてたら進行しないガード↑↑↑ここまで
+
+// 画面中クリックで進む（ボタン以外のタップに限定）
+const sceneRoot = document.querySelector("#page-scene .scene");
+sceneRoot.addEventListener("click", (e)=>{
+  // ★モーダル表示中は無視
+  if (anyModalOpen()) return;
+
+  const t = e.target;
+  const isButton = t.closest("button");
+  const inChoice = !el("choices").classList.contains("hidden");
+  if(isButton || inChoice) return; // ボタン・選択肢は除外
+  advance();
+});
+
+// ミニボタン
+el("btn-go").addEventListener("click", advance);
+
+// ⏩早送り：ガワ（押している間だけテキスト速度を即時に）
+let _ffOrigSpeed = null;
+el("btn-ff").addEventListener("mousedown", ()=>{
+  _ffOrigSpeed = settings.textSpeed;
+  settings.textSpeed = "instant";
+});
+el("btn-ff").addEventListener("mouseup", ()=>{
+  if(_ffOrigSpeed){ settings.textSpeed = _ffOrigSpeed; _ffOrigSpeed=null; }
+});
+
+// ▶️AUTO：ガワ（ON/OFFトグルで自動進行）
+let autoTimer = 0, autoOn = false;
+function setAuto(on){
+  window.__autoOn = !!on;         // ← 現在のAUTO状態をグローバルに記録
+  autoOn = on;
+  el("btn-auto").classList.toggle("active", autoOn);
+  clearInterval(autoTimer);
+  if(autoOn){
+    autoTimer = setInterval(()=>{
+      // 選択肢が出たら停止
+      if(!el("choices").classList.contains("hidden")) { setAuto(false); return; }
+      // タイプ中はスキップ→行進
+      if(skipTypewriterIfRunning(el("text"))){ /* 一度全表示してから */ }
+      else{ next(); }
+    }, 900); // 間隔は暫定
+  }
+}
+el("btn-auto").addEventListener("click", ()=> setAuto(!autoOn));
+
+/* 選択肢を選んだあと「決定」ボタンで遷移↓↓↓ここから */
+// ===== Choice with Confirm =====
+const choiceList = document.getElementById("choices");
+const confirmBtn   = document.getElementById("btn-confirm");
+let selectedChoiceIndex = null;
+
+// 選択肢の描画が始まるタイミングで呼んでください（既存の「選択肢モード開始」処理の中）
+function enterChoiceMode(){
+  selectedChoiceIndex = null;
+  confirmBtn?.classList.remove("hidden");
+  confirmBtn.disabled = true;
+  el("choices").classList.remove("hidden");
+  el("btn-confirm").classList.remove("hidden");
+  el("textbox").classList.add("choice-mode");   // ★ 追加
+
+  // 既存: choiceList 内に .btn で選択肢を並べる処理はそのまま
+  // ここではデリゲーションでクリックを拾います
+}
+function exitChoiceMode(){
+  el("choices").classList.add("hidden");
+  el("btn-confirm").classList.add("hidden");
+  el("textbox").classList.remove("choice-mode"); // ★ 追加
+}
+
+// 選択肢クリック（選び直し可）
+choiceList?.addEventListener("click", (e)=>{
+  const btn = e.target.closest(".btn");
+  if (!btn) return;
+
+  // すべての選択肢から active を外し、このボタンだけ active
+  choiceList.querySelectorAll(".btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  // 自分が何番目か（インデックスを控える）
+  const buttons = Array.from(choiceList.querySelectorAll(".btn"));
+  selectedChoiceIndex = buttons.indexOf(btn);
+
+  // 決定ボタンを有効化
+  confirmBtn.disabled = (selectedChoiceIndex < 0);
+});
+
+// 決定で確定→次へ
+confirmBtn?.addEventListener("click", ()=>{
+  if (selectedChoiceIndex == null || selectedChoiceIndex < 0) return;
+
+  const opts = window.currentChoiceOptions || [];
+  const opt  = opts[selectedChoiceIndex];
+  if (!opt) return;
+
+  // ログ（選んだ選択肢のID）
+  state.log.push(opt.id || "");
+
+  // Backlog 用に「選んだ選択肢の文言」を履歴へ積む↓↓↓
+  if (opt.label) {
+    state.history.push({
+      type: "choice",
+      txt: opt.label
+      // 必要なら id も残す: id: opt.id || null
+    });
+  }
+  // Backlog 用に「選んだ選択肢の文言」を履歴へ積む↑↑↑
+
+  // ===== 従来「選択直後にやっていた処理」をここで実行 =====
+  if (opt.effects) {
+    // 効果を適用
+    applyEffects(opt.effects);
+
+    // 逆効果を作ってUNDOに積む（aff.*だけ符号反転）
+    const inv = {};
+      for (const k in opt.effects) {
+        if (k.startsWith("aff.") || k.startsWith("affp.")) {
+          const delta = parseInt(String(opt.effects[k] || "0"), 10) || 0;
+          inv[k] = -delta; // ％もマイナスで戻す。applyEffects が繰り上げ/繰り下げ処理を面倒みます
+        }
+      }
+    state.undoStack.push({ effects: inv });
+  } else {
+    // 効果なしでも1手分として空エントリを積む
+    state.undoStack.push({ effects: null });
+  }
+
+  // 「選択直後の1行へ進む」「その行は戻れない境界」に設定
+  state.cursor++;
+  state.backLockAt = state.cursor;
+
+  save();
+  renderCurrent();   // 次の行を描画
+
+  // 後片付け
+  confirmBtn.disabled = true;
+  confirmBtn.classList.add("hidden");
+  selectedChoiceIndex = null;
+
+  // 告白シーン用
+  if (opt.id && opt.id.startsWith("confess.")) {
+    const who = opt.id.split(".")[1];      // "haruto" or "tsukasa"
+    state.vars.confessTo = who;
+    save();
+  }
+
+
+});
+
+/* 選択肢を選んだあと「決定」ボタンで遷移↑↑↑ここまで */
+
+/** =========================
+ *  Scene player
+ *  ========================= */
+function renderCurrent() {
+  const scene = findScene(state.sceneId);
+  const name = el("name");
+  const text = el("text");
+  const btnNext = el("btn-next") || el("btn-go");  // ← 追加
+  const choices = el("choices");
+  const backBtn = el("btn-backline");
+
+  // ★追加：最初のシーンの1ページ目では必ず戻る禁止にする↓↓↓ここから
+  //  ・sceneId が prologue_studio
+  //  ・カーソルが 0 行目
+  //  ・まだ履歴が空（＝ゲーム開始直後）
+  if (state.sceneId === "prologue_studio" &&
+      state.cursor === 0 &&
+      state.history.length === 0) {
+    state.backLockAt = 0;
+  }
+  // ★追加：最初のシーンの1ページ目では必ず戻る禁止にする↑↑↑ここまで
+
+  // ロック中は戻れない → 無効化（非表示にしたければ hidden をトグル）
+  const lock = (state.backLockAt != null && state.cursor === state.backLockAt);
+  backBtn.disabled = lock;
+  // backBtn.classList.toggle("hidden", lock); // ←「隠す」派ならこちら
+  const textbox = document.querySelector(".textbox"); // ← 追加（.textbox 参照）※選択肢画面と通常テキストを区別するため
+
+  if (!scene) {
+    name.innerHTML = "";
+    text.textContent = "script_json が未設定です（または sceneId が見つかりません）";
+    btnNext.classList.add("hidden");
+    choices.classList.add("hidden");
+    return;
+  }
+
+  setBG();
+  updateHUD();
+
+  const STORY_ORDER = ["prologue_studio", "prologue_studio_tsukasa", "confession"]; //【将来キャラが増えたら】nextAfterScene() を配列ドライブにする
+
+  const i = state.cursor;
+  // if (i >= scene.lines.length) { showResult(); return; } を↓に置き換え
+  if (i >= scene.lines.length) { nextAfterScene(); return; }
+  const node = scene.lines[i];
+
+  // 追加：シーン遷移ハブ↓↓↓ここから
+  function nextAfterScene() {
+    if (state.sceneId === "prologue_studio") {
+      // 陽翔の次は司
+      state.sceneId = "prologue_studio_tsukasa";
+      state.cursor = 0;
+      state.backLockAt = 0;      // 各シーン最初の1ページでは◀️が非表示になり、2ページ目以降は自動で再表示
+      save(); setBG(); renderCurrent();
+      return;
+    }
+    if (state.sceneId === "prologue_studio_tsukasa") {
+      // 司が終わったら告白シーンへ
+      state.sceneId = "confession";
+      state.cursor = 0;
+      state.backLockAt = 0;      // 各シーン最初の1ページでは◀️が非表示になり、2ページ目以降は自動で再表示
+      save(); setBG(); renderCurrent();
+      return;
+    }
+    // 告白シーンが終わったら結果
+    showResult();
+  }
+  // 追加：シーン遷移ハブ↑↑↑ここまで
+
+  // reset
+  btnNext.classList.remove("hidden");
+  choices.classList.add("hidden");
+  choices.innerHTML = "";
+
+  // ★ 念のため決定ボタンを閉じて無効化
+  confirmBtn?.classList.add("hidden");
+  confirmBtn.disabled = true;
+
+  if (node.narrate != null) {
+    textbox.classList.remove("choice-mode");   // 追加（選択肢モードと通常モードで区別）
+    name.innerHTML = "";
+    const shown = resolveInlineVars(node.narrate);    // 画面表示は展開
+    startTypewriter(text, shown);
+    state.history.push({ type: "narrate", txt: node.narrate }); // 履歴は未展開で保存
+    save();
+    setChar("", "");
+  } else if (node.say) {
+    textbox.classList.remove("choice-mode");   // 追加（選択肢モードと通常モードで区別）
+    const { ch, emo, txt } = node.say;
+    name.innerHTML = renderNameLabel(ch);
+
+    const shown = resolveInlineVars(txt || "");       // 画面表示は展開
+    startTypewriter(text, shown);
+
+    const isMC = (ch === "主人公");
+    const displayCh = isMC ? profile.given : ch;  // Logの発言者名は“名のみ”でOK
+    state.history.push({ type: "say", ch: displayCh, txt: txt || "", mc: isMC });
+
+    save();
+    setChar(ch, emo);
+  }
+
+   else if (node.choice) {
+    textbox.classList.add("choice-mode");   // ← 追加（選択肢モードと通常テキストモードを区別）
+    name.innerHTML = "";
+    text.textContent = "※選択肢をタップして「決定」を押してください。「◀️」ボタンで直前の会話を確認できます。";
+    btnNext.classList.add("hidden");
+    choices.classList.remove("hidden");
+    flashBG();
+
+    // ★ 決定時に参照するため、配列を退避
+    window.currentChoiceOptions = node.choice;
+
+    node.choice.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "btn";
+      b.textContent = opt.label || "(選択肢)";
+      choices.appendChild(b);
+    });
+    enterChoiceMode();   // ← これを追加（決定ボタンを表示＆無効化で初期化）
+    return;
+  } else {
+    state.cursor++; save(); renderCurrent(); return;
+  }
+}
+
+/* applyEffects() を「aff.*（整数）」「affp.*（％）」の両方に対応↓↓↓ここから */
+
+function applyEffects(effects) {
+  if (!effects) return;
+
+  for (const k of Object.keys(effects)) {
+    const val = parseInt(String(effects[k] ?? "0"), 10) || 0;
+
+    // ♥の整数（0..4 まで増やす前提。heartsUI側でベース1が点灯）
+    if (k.startsWith("aff.")) {
+      const who = k.slice(4);
+      if (state.affection[who] == null) state.affection[who] = 0;
+      state.affection[who] = Math.max(0, Math.min(4, state.affection[who] + val));
+    }
+
+    // 次の♥までの％（0..100）
+    if (k.startsWith("affp.")) {
+      const who = k.slice(5);
+      if (state.affFine[who] == null) state.affFine[who] = 0;
+
+      let fine = state.affFine[who] + val;
+
+      // 正方向の繰り上げ（MAX: ♥5＝整数4＋100%）
+      while (fine >= 100 && state.affection[who] < 4) {
+        state.affection[who] += 1;
+        fine -= 100;
+      }
+      // 逆方向（％がマイナスになったら借りる）
+      while (fine < 0 && state.affection[who] > 0) {
+        state.affection[who] -= 1;
+        fine += 100;
+      }
+      // すでに♥が最大なら％は 0..100 にクランプ（100%でMAX演出）
+      if (state.affection[who] >= 4) {
+        fine = Math.max(0, Math.min(100, fine));
+      }
+      state.affFine[who] = Math.max(0, Math.min(100, fine));
+    }
+  }
+
+  save();
+  updateHUD(true);
+  if (!el("status-modal").classList.contains("hidden")) renderStatus();
+}
+/* applyEffects() を「aff.*（整数）」「affp.*（％）」の両方に対応↑↑↑ここまで */
+
+
+function next() {
+  // まずタイプライタ中ならスキップ
+  if (skipTypewriterIfRunning(el("text"))) return;
+  // この前進自体には効果は無いが、戻す対象として空エントリを積んでおく
+  state.undoStack.push({ effects: null });
+  state.cursor++;
+  save();
+  renderCurrent();
+}
+
+function backOneLine() {
+  if (skipTypewriterIfRunning(el("text"))) return;
+  if (state.cursor <= 0) return;
+
+  // ★ 選択直後の1行（ロック位置）からは戻れない
+  if (state.backLockAt != null && state.cursor === state.backLockAt) {
+    return; // 何もしない（無効）
+  }
+
+  // 直前の前進に対応するUNDOを取得
+  const last = state.undoStack.pop() || null;
+  if (last && last.effects) {
+    applyEffects(last.effects); // 逆効果を適用（好感度を戻す等）
+  }
+
+  state.cursor = Math.max(0, state.cursor - 1);
+  save();
+  renderCurrent();
+}
+el("btn-backline").addEventListener("click", backOneLine);
+
+// === モーダルとAUTOの橋渡し↓↓↓ここから ===
+// モーダルが開いたら：AUTOを一時停止（元がONならフラグを立てる）
+// モーダルが閉じたら：フラグが立っていればAUTOを再開
+(function(){
+  let autoPausedByModal = false;
+
+  function sync(){
+    const open = anyModalOpen();
+    if (open) {
+      if (window.__autoOn && !autoPausedByModal) {
+        autoPausedByModal = true;   // 「元々ONだった」を記録
+        try { setAuto(false); } catch(e){}
+      }
+    } else {
+      if (autoPausedByModal) {
+        autoPausedByModal = false;
+        try { setAuto(true); } catch(e){}
+      }
+    }
+  }
+
+  // 初期状態でも一度判定
+  sync();
+
+  // .modal 要素の表示/非表示（hiddenクラス変化）を監視
+  const obs = new MutationObserver(sync);
+  obs.observe(document.body, { subtree:true, attributes:true, attributeFilter:['class'] });
+
+  // 念のためフォーカス変化でも同期（モバイルでの描画ラグ対策）
+  window.addEventListener('focus', sync);
+})();
+// === モーダルとAUTOの橋渡し↑↑↑ここまで ===
+
+
+/** =========================
+ *  Result
+ *  ========================= */
+function showResult() {
+  showPage("result");
+  setAuto(false);
+
+  const who = state.vars.confessTo || "haruto"; // "haruto" or "tsukasa"
+  const aff = state.affection[who] ?? 0;
+
+  // 1) エンド種別と本文
+  let endTitle = "";
+  let body = "";
+  if (aff >= 4) {
+    endTitle = "トゥルーエンド";
+    body = "選んだその手を、彼はまっすぐ受け取ってくれた。";
+  } else if (aff >= 3) {
+    endTitle = "ハッピーエンド";
+    body = "想いは届きはじめている。次の一歩は、きっと一緒に。";
+  } else {
+    endTitle = "ノーマルエンド";
+    body = "まだ重なる鼓動は小さい。これから育てていけばいい。";
+  }
+
+  // 2) 告白相手の表示名
+  const whoLabel = (who === "haruto") ? "陽翔" : "司";
+
+  // 3) 好感度一覧（縦並び）
+  const affList = `陽翔:${state.affection.haruto || 0}
+司:${state.affection.tsukasa || 0}`;
+
+  // 4) 反映
+  const rt = document.getElementById("result-title");
+  const tx = document.getElementById("result-text");
+  const tg = document.getElementById("result-target");
+  const al = document.getElementById("result-aff-list");
+
+  if (rt) rt.textContent = `結果 【${endTitle}】`;
+  if (tx) tx.textContent = body;
+  if (tg) tg.textContent = whoLabel;
+  if (al) al.textContent = affList;
+}
+
+
+/** =========================
+ *  Title / Settings handlers
+ *  ========================= */
+
+if (new URLSearchParams(location.search).has('debug')) {
+// New Game → まず開始キャラを選ぶ（デバッグ限定UI）
+el("btn-new").addEventListener("click", () => {
+  // スクリプトが未ロードなら弾く（選択前に気づけるように）
+  if (!parseScript()) { 
+    alert("先に script_json を Load してください。");
+    return;
+  }
+  // モーダルを開く
+  el("start-modal").classList.remove("hidden");
+});
+}
+
+el("btn-continue").addEventListener("click", () => {
+  if (!parseScript()) { alert("先に script_json を Load してください。"); return; }
+  // タイトル画面のまま Load モーダルだけ開く
+  openLoadModal("title");   // ★ タイトル由来として開く（「セーブデータをロードしますか？」のメッセージ出し分け用）
+});
+
+el("btn-back").addEventListener("click", () => showPage("title"));
+
+el("btn-settings").addEventListener("click", () => {
+  // 現在のプロフィールをフォームに反映
+  el("inp-family").value = profile.family;
+  el("inp-given").value = profile.given;
+  el("sel-fontsize").value = settings.fontSize || defaultSettings.fontSize;
+  el("sel-theme").value     = settings.theme    || defaultSettings.theme;
+  el("sel-textspeed").value = settings.textSpeed|| defaultSettings.textSpeed;
+  showPage("settings");
+});
+
+el("btn-cancel-settings").addEventListener("click", () => showPage("title"));
+el("btn-save-settings").addEventListener("click", () => {
+  const fam = el("inp-family").value.trim() || defaultProfile.family;
+  const giv = el("inp-given").value.trim() || defaultProfile.given;
+  profile.family = fam; profile.given = giv;
+  saveProfile();
+
+  // ▼ 文字サイズの保存と適用
+  const fs = el("sel-fontsize").value;
+  settings.fontSize = fs;
+  settings.theme    = el("sel-theme").value;
+  settings.textSpeed= el("sel-textspeed").value;
+  saveSettings();
+  applyFontSize();
+  applyTheme();
+
+  // 進行中の会話にも即反映したいときは再描画
+  if (!pages.scene.classList.contains("hidden")) {
+    renderCurrent();
+  }
+  showPage("title");
+});
+
+/** =========================
+ *  Script input
+ *  ========================= */
+el("btn-load").addEventListener("click", () => {
+  script_json = el("script-input").value;
+  const ok = parseScript();
+  el("load-msg").textContent = ok ? "Loaded" : "JSON Parse Error";
+});
+el("btn-fill").addEventListener("click", () => {
+  script_json = DEFAULT_SCRIPT;
+  el("script-input").value = DEFAULT_SCRIPT;
+  const ok = parseScript();
+  el("load-msg").textContent = ok ? "Loaded (sample)" : "JSON Parse Error";
+});
+
+/** -------------------------
+ *  Default sample script (assets/celest/<key>/standing/<pose>.png & assets/bg/bg_<sceneId>.png)
+ *  ------------------------- */
+const DEFAULT_SCRIPT = JSON.stringify({
+  "scenes": [
+    {
+      "id": "prologue_studio",
+      "lines": [
+        {"narrate":"初めての収録。\nわたしの手は、少し汗ばんでいた。"},
+        {"say":{"ch":"陽翔","emo":"normal","txt":"ねぇ、深呼吸。大丈夫でしょ？"}},
+        {"choice":[
+          {"id":"00_haruto_1-a","label":"ありがとう。少し落ち着いたかも。","effects":{"aff.haruto":"+1","affp.haruto":"+50"}},
+          {"id":"00_haruto_1-b","label":"平気だよ。…たぶん。","effects":{"aff.haruto":"+1"}},
+          {"id":"00_haruto_1-c","label":"深呼吸したら落ち着けるかな？"}
+        ]},
+        {"say":{"ch":"主人公","emo":"normal","txt":"息を吸って、吐いて。うん、いける。"}},
+        {"say":{"ch":"陽翔","emo":"normal","txt":"{MC}、ほら。ここの入り、君の声で空気が変わるから。"}},
+        {"choice":[
+          {"id":"00_haruto_2-a","label":"…信じてる。任せて。","effects":{"aff.haruto":"+1","affp.haruto":"+50"}},
+          {"id":"00_haruto_2-b","label":"うん、やってみる。","effects":{"aff.haruto":"+1"}},
+          {"id":"00_haruto_2-c","label":"プレッシャーかけないでよ…！"}
+        ]},
+        {"narrate":"スタジオのライトが、少しだけあたたかく見えた。"}
+      ]
+    },
+    {
+      "id": "prologue_studio_tsukasa",
+      "lines": [
+      {"narrate":"収録後は、ボーカルレッスン。"},
+      {"narrate":"気持ちを切り替えて、集中しよう。"},
+      {"narrate":"譜面台の上、黒いインクが乾ききっていない。"},
+        {"say":{"ch":"司","emo":"normal","txt":"…おい、呼吸が浅い。最初の二拍、音が痩せるだろ。"}},
+        {"choice":[
+          {"id":"00_tsukasa_1-a","label":"わかった。次は大丈夫。","effects":{"aff.tsukasa":"+1","affp.tsukasa":"+50"}},
+          {"id":"00_tsukasa_1-b","label":"ごめん。やり直す。","effects":{"aff.tsukasa":"+1"}},
+          {"id":"00_tsukasa_1-c","label":"痩せてない。…はず。"}
+        ]},
+        {"say":{"ch":"司","emo":"normal","txt":"口で言うより、音で示せ。…できるだろ。"}},
+        {"choice":[
+          {"id":"00_tsukasa_2-a","label":"できる。聴いてて。","effects":{"aff.tsukasa":"+1","affp.tsukasa":"+50"}},
+          {"id":"00_tsukasa_2-b","label":"うん、やってみる。","effects":{"aff.tsukasa":"+1"}},
+          {"id":"00_tsukasa_2-c","label":"…たぶん。"}
+        ]},
+        {"narrate":"その声は、さっきよりも深く響いた。…そんな気がした。"}
+      ]
+    },
+    {// DEFAULT_SCRIPT に告白シーンを追加
+      "id": "confession",
+      "lines": [
+        {"narrate":"溢れそうな気持ちを、彼に伝えたい。"},
+        {"choice":[
+          {"id":"confess.haruto","label":"陽翔に告白する"},
+          {"id":"confess.tsukasa","label":"司に告白する"}
+        ]},
+        {"narrate":"わたしは、想いを伝えた。"}
+      ]
+    }
+  ]
+}, null, 2);
+
+
+// === 起動時に埋め込みスクリプトをセットして即パース ↓↓↓ここから ===
+script_json = DEFAULT_SCRIPT; //Paste script jsonをスキップする処理
+parseScript();
+
+// （デバッグ用）テキストエリアにも入れておく
+const _si = document.getElementById("script-input");
+if (_si) {
+  _si.value = DEFAULT_SCRIPT;
+  const msg = document.getElementById("load-msg");
+  if (msg) msg.textContent = "Loaded (embedded)";
+}
+
+// 起動時に Paste欄を制御（?debug があればPaste欄を表示）
+const params = new URLSearchParams(location.search);
+if (!params.has("debug")) {
+  const pasteCard = document.getElementById("script-input")?.closest(".card");
+  if (pasteCard) pasteCard.classList.add("hidden");
+}
+
+// === Pasteカードを非表示（プロト時のみ）===
+const _card = document.getElementById("script-input")?.closest(".card");
+if (_card) _card.classList.add("hidden");
+
+// === 起動時に埋め込みスクリプトをセットして即パース ↑↑↑ここまで ===
+
+
+// init
+showPage("title");
+
+
+
+// ------ Backlog ------
+function speakerLabelForLog(h) {
+  // mc フラグが無くても ch==="主人公" なら主人公扱い
+  const isMC = (h.mc === true) || (h.ch === "主人公");
+  return isMC ? profile.given : h.ch;  // ログは名のみ（苗字なし）
+}
+
+function renderLog() {
+  const box = el("log-list");
+  box.innerHTML = "";
+  if (!state.history.length) {
+    box.innerHTML = `<div class="subtitle">（まだ履歴はありません）</div>`;
+    return;
+  }
+  state.history.forEach(h => {
+    const div = document.createElement("div");
+    div.className = "list-item";
+
+    if (h.type === "say") {
+      const speaker = speakerLabelForLog(h);
+      const body    = resolveInlineVars(h.txt);     // ここで {MC} を最新名に展開
+      div.innerHTML = `<div><strong>${speaker}</strong></div><div class="meta">${body}</div>`;
+      } else if (h.type === "choice") {
+      // ★追加：選択肢行をそのまま表示（先頭に▶など付けてもよい）
+        const body = resolveInlineVars(h.txt);
+        div.innerHTML = `<div class="meta">▶ ${body}</div>`;
+      } else { // narrate
+        const body = resolveInlineVars(h.txt);
+        div.innerHTML = `<div class="meta">— ${body}</div>`;
+      }
+    box.appendChild(div);
+  });
+}
+
+// -----Log（ガード付き）----
+const btnLog = el("btn-log");
+if (btnLog) {
+  btnLog.addEventListener("click", () => {
+    renderLog();
+    el("log-modal").classList.remove("hidden");
+  });
+}
+el("btn-log-close").addEventListener("click", () =>
+  el("log-modal").classList.add("hidden")
+);
+
+
+// ------ Album ------
+function renderAlbum() {
+  const box = el("album-list");
+  box.innerHTML = "";
+  if (!state.seenStills.length) {
+    box.innerHTML = `<div class="subtitle">（表示済みスチルはありません）</div>`;
+    return;
+  }
+  // "haruto:kiss01" → 表示名に整形
+  const prettyName = (tag) => {
+    const [key, slug] = tag.split(":");
+    // ざっくり英数字→日本語名（必要なら辞書を拡充）
+    const rev = { haruto:"陽翔", koh:"煌", ryoya:"涼弥", rei:"怜", tsukasa:"司"};
+    return `${rev[key] || key}：${slug}`;
+  };
+  state.seenStills.forEach(tag => {
+    const div = document.createElement("div");
+    div.className = "list-item";
+    div.innerHTML = `<div><strong>${prettyName(tag)}</strong></div><div class="meta">${tag}</div>`;
+    box.appendChild(div);
+  });
+}
+el("btn-album").addEventListener("click", () => { renderAlbum(); el("album-modal").classList.remove("hidden"); });
+el("btn-album-close").addEventListener("click", () => el("album-modal").classList.add("hidden"));
+
+
+// About モーダル開閉
+el("btn-about").addEventListener("click", () => {
+  el("about-modal").classList.remove("hidden");
+});
+el("btn-about-close").addEventListener("click", () => {
+  el("about-modal").classList.add("hidden");
+});
+
+// 版数はここで一元管理（申請のたびに書き換え）
+const APP_VERSION = "v0.1.0 (Demo)";
+el("app-version").textContent = `Version: ${APP_VERSION}`;
+
+// ===== 楽曲リスト（プレースホルダ） =====
+const TRACKS = [
+  { id:"op_theme", title:"Value of Stars", unit:"CELEST", length:"3:08" },
+  { id:"hr_ballad", title:"君の呼吸", unit:"神谷 陽翔", length:"3:15" },
+  { id:"ts_midtempo", title:"余白", unit:"九条 司", length:"2:58" }
+];
+// 必要になったら previewUrl を assets/audio/*.mp3 で足せます：{ previewUrl:"assets/audio/op_theme.mp3" }
+
+let currentTrackIndex = 0;      // 仮想的な「再生中の曲」
+let currentPlayMode   = "normal"; // "normal" | "shuffle" | "one" | "all"
+let hasTrackSelection = false;    // 曲リストに「選択中」があるか
+
+//現在再生中の曲情報を更新↓↓↓ここから
+function updateNowPlayingUI() {
+  const t = TRACKS[currentTrackIndex];
+  if (!t) return;
+
+  el("np-title").textContent  = t.title;
+  el("np-artist").textContent = t.unit;
+
+  const parts = (t.length || "0:00").split(":");
+  const totalSec =
+    Number(parts[0] || 0) * 60 +
+    Number(parts[1] || 0);
+
+  el("np-time-current").textContent = "0:00";
+  el("np-time-total").textContent   = t.length || "0:00";
+
+  const seek = el("np-seek");
+  seek.min   = 0;
+  seek.max   = totalSec;
+  seek.value = 0;
+  updateSeekFill(seek);   // ←追加（色のリセット）
+
+}
+//現在再生中の曲情報を更新↑↑↑ここまで
+
+//楽曲リスト描画関数↓↓↓ここから
+function highlightCurrentTrack() {
+  const rows = document.querySelectorAll(".track-row");
+
+  rows.forEach((row, i) => {
+    const active = hasTrackSelection && i === currentTrackIndex;
+
+    row.classList.toggle("is-active", active);
+
+    // ▶ ボタンの光り方
+    const btn = row.querySelector(".track-play-btn");
+
+    // 波紋アニメの対象
+    const wave = row.querySelector(".track-wave");
+
+    if (btn)  btn.classList.toggle("is-playing", active);
+
+    if (wave) {
+      wave.classList.add("show", "pulsing");
+    } else {
+      wave.classList.remove("show", "pulsing");
+    }
+  });
+}
+
+
+function renderTracks() {
+
+  const box = el("tracks-list");
+  if (!box) return;
+  box.innerHTML = "";
+
+  TRACKS.forEach((t, index) => {
+    const row = document.createElement("div");
+    row.className = "track-row";
+    row.dataset.index = String(index);
+
+    // 表示用タイトルから先頭の ▶️ を削る
+    const cleanTitle = t.title.replace(/^▶️\s*/, ""); //消したら動かないので残す
+
+    row.innerHTML = `
+      <div class="track-number">${index + 1}</div>
+      <div class="track-wave"></div>
+
+      <button class="track-play-btn" data-index="${index}"
+              aria-label="${cleanTitle} を再生">
+        <span class="icon">▶</span>
+      </button>
+
+      <div class="track-info">
+        <div class="track-title">${cleanTitle}</div>
+        <div class="track-meta">${t.unit} ／ ${t.length}</div>
+      </div>
+    `;
+
+    row.querySelector(".track-number").textContent = index + 1;
+
+    box.appendChild(row);
+  });
+
+  highlightCurrentTrack();
+}
+//楽曲リスト描画関数↑↑↑ここまで
+
+//再生ボタン・モードボタンのイベント↓↓↓ここから
+function flashPlayButton(btn) {
+  if (!btn) return;
+  btn.classList.remove("is-playing");
+  // 再付与のための reflow
+  void btn.offsetWidth;
+  btn.classList.add("is-playing");
+  setTimeout(() => btn.classList.remove("is-playing"), 260);
+}
+
+function attachTrackUIEvents() {
+  const modal = el("tracks-modal");
+  if (!modal) return;
+
+
+
+    // 再生／一時停止ボタンのトグル↓↓↓ここから
+    const npToggle = el("np-toggle");
+    if (npToggle) {
+      // 初期状態を ▶ に強制
+      npToggle.textContent = "▶";
+
+      npToggle.addEventListener("click", () => {
+        const now = npToggle.textContent.trim();
+
+        // ▶ → ❚❚
+        if (now === "▶") {
+          npToggle.textContent = "❚❚";
+
+            // ★追加：初回再生時にリスト側も選択状態にする
+            if (!hasTrackSelection) {
+              hasTrackSelection = true;
+              // currentTrackIndex は 0 初期値のままでOK（Value of Stars）
+              highlightCurrentTrack();
+              updateNowPlayingUI();
+            }
+          }
+        // ❚❚ → ▶
+        else {
+          npToggle.textContent = "▶";
+          // 停止しても選択状態は維持（仕様どおり）
+        }
+      });
+    }
+    // 再生／一時停止ボタンのトグル↑↑↑ここまで
+
+    // 再生モード切替（トグル式）※shuffle／loop の ON/OFF トグル（再クリックで OFF）※↓↓↓ここから
+    document.querySelectorAll(".trk-mode-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+
+        const mode = btn.dataset.mode;
+
+        // すでに active → OFF（解除）
+        if (btn.classList.contains("is-active")) {
+          btn.classList.remove("is-active");
+          currentPlayMode = "normal";   // default 状態へ戻す
+          return;
+        }
+
+        // OFF のものを ON にする
+        currentPlayMode = mode;
+
+        // 他のボタンは OFF
+        document.querySelectorAll(".trk-mode-btn").forEach(b =>
+          b.classList.toggle("is-active", b === btn)
+        );
+      });
+    });
+    // 再生モード切替（トグル式）↑↑↑ここまで
+
+  // 各曲の「▶」ボタン（イベント委譲）
+  modal.addEventListener("click", (e) => {
+    // 行全体をクリックしてもOK
+    const row = e.target.closest(".track-row");
+    if (!row) return;
+
+    const idx = Number(row.dataset.index || "0");
+    currentTrackIndex = idx;
+    hasTrackSelection = true;          // ここで「選択あり」にする
+
+    highlightCurrentTrack();
+    updateNowPlayingUI();
+
+    // 演出用：左の ▶ ボタンだけを光らせる
+    const playBtn = row.querySelector(".track-play-btn");
+    flashPlayButton(playBtn);
+
+    // 実際の音声再生は未実装（ガワのみ）
+  });
+
+}
+//再生ボタン・モードボタンのイベント↑↑↑ここまで
+
+// イベント
+el("btn-tracks").addEventListener("click", () => {
+  renderTracks();
+  el("tracks-modal").classList.remove("hidden");
+});
+el("btn-tracks-close").addEventListener("click", () => el("tracks-modal").classList.add("hidden"));
+// 初期化（DOM構築後に1回だけ）
+attachTrackUIEvents();
+
+el("btn-tracks-close").addEventListener("click", () => el("tracks-modal").classList.add("hidden"));
+
+// ===== NFT（プレースホルダ） =====
+const NFT_CONFIG = {
+  name: "Offstage Love – CELEST Cards",
+  url: "#" // 後で OpenSea 等のURLに差し替え
+};
+el("nft-collection-name").textContent = NFT_CONFIG.name;
+el("nft-link").textContent = NFT_CONFIG.url === "#" ? "準備中" : NFT_CONFIG.url;
+el("nft-link").href = NFT_CONFIG.url;
+
+el("btn-nft").addEventListener("click", () => el("nft-modal").classList.remove("hidden"));
+el("btn-nft-close").addEventListener("click", () => el("nft-modal").classList.add("hidden"));
+
+// Start Character Select modal handlers（Proto Only）
+el("btn-start-haruto").addEventListener("click", () => {
+  el("start-modal").classList.add("hidden");
+  startGameAt("prologue_studio"); // 陽翔
+});
+el("btn-start-tsukasa").addEventListener("click", () => {
+  el("start-modal").classList.add("hidden");
+  startGameAt("prologue_studio_tsukasa"); // 司
+});
+el("btn-start-cancel").addEventListener("click", () => {
+  el("start-modal").classList.add("hidden");
+});
+
+// ===== Quick Actions (ガワだけ) =====↓↓↓ここから
+(function(){
+  const m  = el("qa-modal");
+  const t  = el("qa-title");
+  const b  = el("qa-body");
+  const x  = el("qa-close");
+  if(!m) return;
+
+  function open(title, body){
+    t.textContent = title;
+    b.innerHTML   = body;
+    m.classList.remove("hidden");
+    document.body.classList.add("modal-open");  // ← 背景スクロール停止（任意）
+  }
+  function close(){
+    m.classList.add("hidden");
+    document.body.classList.remove("modal-open");
+  }
+
+  x.addEventListener("click", close);
+  m.addEventListener("click", (e)=>{ if(e.target === m) close(); });
+
+  el("qa-shop").addEventListener("click", ()=>{
+    open("ポイント購入（準備中）", "有償ポイントの購入は本番で実装予定です。");
+  });
+  el("qa-transfer").addEventListener("click", ()=>{
+    open("機種変更（準備中）",
+      "セーブデータ移行機能をここに統合予定です。<br>※QR/コード入力UIは別途実装。");
+  });
+  el("qa-contact").addEventListener("click", ()=>{
+    open("お問い合わせ（準備中）",
+      "FAQ・ご意見・不具合報告フォームを本番で接続予定です。<br>当面は <a href='mailto:info@offstagelove.com'>info@offstagelove.com</a> へ。");
+  });
+})();
+
+// ===== Quick Actions (ガワだけ) =====↑↑↑ここまで
+
+// ===== Splash → Start Screen 遷移 =====↓↓↓ここから
+
+(function(){
+  const splash = document.getElementById("splash");
+  const start  = document.getElementById("start-screen");
+  if (!splash || !start) return;
+
+  let tStart = null, tFade = null, skipped = false;  // ← スプラッシュ専用の keydown ハンドラを外せるように保持
+  let keyHandler = null;
+
+  function clearAll() {
+    if (tStart) { clearTimeout(tStart); tStart = null; }
+    if (tFade)  { clearTimeout(tFade);  tFade = null; }
+
+    // スプラッシュ専用キー待ちを確実に解除
+    if (keyHandler) {
+      window.removeEventListener("keydown", keyHandler);
+      keyHandler = null;
+    }
+
+  }
+    function goDirectToTitle() {
+    skipped = true;
+    clearAll();                       // ← 自動遷移を完全キャンセル
+    splash.classList.add("hidden");
+    start.classList.add("hidden");
+    showPage("title");
+  }
+
+  // 2.5秒後にスタート画面へ（※スキップ済みなら何もしない）
+  tStart = setTimeout(() => {
+    if (skipped) return;
+    splash.classList.add("fadeout");
+    tFade = setTimeout(() => {
+      if (skipped) return;
+      splash.classList.add("hidden");
+      start.classList.remove("hidden");
+      // ここに来たら「スプラッシュ中の any-key でタイトルへ」の待機は不要
+      clearAll(); // （上で window の keydown も外れます）
+    }, 1000);
+  }, 2500);
+
+  // スキップイベント（once で1回だけ）
+  splash.addEventListener("click", goDirectToTitle, { once: true });
+  // window に張るが、後で確実に remove できるように参照を保持
+  keyHandler = () => goDirectToTitle();
+  window.addEventListener("keydown", keyHandler, { once: true });
+
+})();
+
+
+// ===== Splash → Start Screen 遷移 =====↑↑↑ここまで
+
+// ===== Start Screen: Tap/Key でタイトルへ　↓↓↓ここから =====
+(function(){
+  const start = document.getElementById("start-screen");
+  if(!start) return;
+
+    // ♪ ♫ ♭ ♯ の降雪エフェクト（軽量）
+    (function makeNotes(){
+      const layer = document.getElementById("notes-layer");
+      if(!layer) return;
+
+      const reduced = window.matchMedia &&
+                      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const chars   = ["♪","♫","♭","♯"];
+
+      // ランダム色
+      const colors  = [
+        "#F09199", // 桜ピンク
+        "#F6B7B5", // ピーチ
+        "#F9D3C4", // サーモン
+        "#FCE3B7", // 杏クリーム
+        "#FFF2CC", // レモンクリーム
+        "#FFFFFF"  // 白
+      ];
+
+      const isMobile = window.matchMedia("(max-width: 480px)").matches;
+      const COUNT    = isMobile ? 16 : 24;
+
+      for (let i = 0; i < COUNT; i++) {
+        const sp = document.createElement("span");
+        sp.textContent = chars[Math.floor(Math.random() * chars.length)];
+        sp.style.color = colors[Math.floor(Math.random() * colors.length)]; // ★ここで色を付ける
+
+        const left  = Math.random() * 100;
+        const size  = 14 + Math.random() * 10;
+        const dur   = 14 + Math.random() * 10;   // ← ゆっくり（14〜24秒）
+        const delay = Math.random() * 6;
+
+        sp.style.left = left + "%";
+        sp.style.fontSize = size + "px";
+        sp.style.setProperty("--dur",   dur   + "s");
+        sp.style.setProperty("--delay", delay + "s");
+
+        if (reduced) sp.style.animation = "none"; // 生成はする（表示だけ）
+
+        layer.appendChild(sp);
+      }
+    })();
+
+
+  function enter(){
+    // フェード→非表示
+    start.classList.add("bye");
+    setTimeout(()=> start.classList.add("hidden"), 320);
+  }
+  start.addEventListener("click", enter);
+  window.addEventListener("keydown", enter, { once:true });
+
+  // 初期ページは既存通り title を表示してOK（スタート画面が上に覆う）
+  // showPage("title"); は既に呼ばれているので変更不要
+})();
+// ===== Start Screen: Tap/Key でタイトルへ　↑↑↑ここまで =====
+
+// ===== Tap Effect ↓↓↓ここから=====
+(function(){
+  const chars  = ["❤","♡","★","☆","♪","♫","♦","♢"];
+  const colors = ["#F09199","#FFD6E0","#FFF","#C8E4FF","#FCE3B7"];
+
+  document.addEventListener("click", (e)=>{
+    //if(e.target.closest("button")) return; // ボタン上は除外制御をコメントアウトで無効化中
+
+    const count = 3; // 散らす粒の数
+    for(let i=0; i<count; i++){
+      const el = document.createElement("span");
+      el.className = "tap-effect";
+      el.textContent = chars[Math.floor(Math.random()*chars.length)];
+      el.style.left = e.pageX + "px";
+      el.style.top  = e.pageY + "px";
+      el.style.color = colors[Math.floor(Math.random()*colors.length)];
+      el.style.fontSize = (12 + Math.random()*10) + "px";
+
+      // ランダム方向ベクトル（-40〜40pxの範囲）
+      const angle = Math.random() * 2 * Math.PI;
+      const dist  = 0 + Math.random()*30; // 半径40〜70px
+      const dx = Math.cos(angle) * dist + "px";
+      const dy = Math.sin(angle) * dist + "px";
+      el.style.setProperty("--dx", dx);
+      el.style.setProperty("--dy", dy);
+
+      document.body.appendChild(el);
+      setTimeout(()=> el.remove(), 1200);
+    }
+  });
+})();
+
+// ===== Tap Effect ↑↑↑ここまで=====
+
+// ===== Romantic Buttons attach ↓↓↓ここから=====
+(function(){
+  // 既存＆今後DOMに追加される .btn に “かわいい版” を付与。
+  // ただし除外したいボタンはそのままにする。
+  const EXCLUDE = new Set(["btn-ghost","btn-mini","qa-btn","btn-confirm"]);
+
+  const apply = (el)=>{
+    if (!el.classList || !el.classList.contains("btn")) return;
+    for (const x of EXCLUDE) if (el.classList.contains(x)) return;
+    el.classList.add("btn-romance");
+  };
+
+  // 初期
+  document.querySelectorAll(".btn").forEach(apply);
+
+  // 途中生成（選択肢など）にも適用
+  const obs = new MutationObserver(muts=>{
+    muts.forEach(m=>{
+      m.addedNodes.forEach(n=>{
+        if(n.nodeType!==1) return;
+        apply(n);
+        n.querySelectorAll?.(".btn").forEach(apply);
+      });
+    });
+  });
+  obs.observe(document.body, { childList:true, subtree:true });
+})();
+// ===== Romantic Buttons attach ↑↑↑ここまで=====
+
+
+// ==== NP SEEK & VOLUME SLIDER FILL ↓↓↓ここから====
+//注意：この制御はattachTrackUIEvents();より後に置く必要がある
+
+// ======================
+// ★ ここから：共通関数 + 初期描画 + イベント
+// ======================
+
+// 共通：スライダーの色付け
+function updateSeekFill(elm) {
+  if (!elm) return;
+  const pct = (elm.value / elm.max * 100) || 0;
+  elm.style.setProperty("--seek-fill", pct + "%");
+}
+
+// 初期描画（HTML 読み込み後）
+document.addEventListener("DOMContentLoaded", () => {
+  const seek  = document.getElementById("np-seek");
+  const vol   = document.getElementById("np-volume");
+  updateSeekFill(seek);
+  updateSeekFill(vol);
+});
+
+// 再生位置スライダー
+// 秒数 → "m:ss" 文字列に変換するヘルパー↓↓↓ここから
+function formatTime(sec) {
+  sec = Math.max(0, Math.floor(Number(sec) || 0)); // 数値＆整数に揃える
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return m + ":" + String(s).padStart(2, "0");
+}
+
+// 再生位置スライダー
+const npSeek = document.getElementById("np-seek");
+if (npSeek) {
+  const npTimeCurrent = document.getElementById("np-time-current"); // 左側ラベル
+
+  npSeek.addEventListener("input", () => {
+    // ピンクの塗り部分
+    updateSeekFill(npSeek);
+
+    // スライダー位置に応じて 0:00 → m:ss を更新
+    if (npTimeCurrent) {
+      npTimeCurrent.textContent = formatTime(npSeek.value);
+    }
+  });
+}
+// 秒数 → "m:ss" 文字列に変換するヘルパー↑↑↑ここまで
+
+// 音量スライダー
+const npVol = document.getElementById("np-volume");
+if (npVol) {
+  npVol.addEventListener("input", () => {
+    updateSeekFill(npVol);
+  });
+}
+
+// ==== NP SEEK & VOLUME SLIDER FILL ↑↑↑ここまで====
+
+// ==========================
+// ★ 音量ミュートの制御　↓↓↓ここから
+// ==========================
+
+// 前回の音量を保存するための変数
+let lastVolume = 70;  // 初期値は適当に。30でも良い。
+
+const volIcon = document.querySelector(".np-vol-icon");
+const volSlider = document.getElementById("np-volume");
+
+// アイコンクリックでミュート／解除
+if (volIcon && volSlider) {
+  volIcon.addEventListener("click", () => {
+
+    const isMuted = volIcon.dataset.muted === "true";
+
+    if (!isMuted) {
+      // ---- ミュートにする ----
+      lastVolume = Number(volSlider.value);  // 現在の値を保存
+      volSlider.value = 0;                  // スライダーを0に
+      updateSeekFill(volSlider);            // 色も更新
+
+      volIcon.textContent = "🔇";           // ミュートアイコンへ
+      volIcon.dataset.muted = "true";
+    } else {
+      // ---- ミュート解除 ----
+      volSlider.value = lastVolume;         // 前の値を復元
+      updateSeekFill(volSlider);            // 色も更新
+
+      volIcon.textContent = "🔊";           // 元のアイコンへ
+      volIcon.dataset.muted = "false";
+    }
+  });
+}
+
+// スライダーが動いたらアイコンも同期させる（0なら自動的にミュート）
+if (volSlider && volIcon) {
+  volSlider.addEventListener("input", () => {
+    const v = Number(volSlider.value);
+
+    updateSeekFill(volSlider);  // 色更新
+
+    if (v === 0) {
+      volIcon.textContent = "🔇";
+      volIcon.dataset.muted = "true";
+    } else {
+      volIcon.textContent = "🔊";
+      volIcon.dataset.muted = "false";
+      lastVolume = v;  // ボリュームを覚えておく
+    }
+  });
+}
+
+// ==========================
+// ★ 音量ミュートの制御　↑↑↑ここまで
+// ==========================
+</script>
+
+      <footer style="text-align: center;">
+      <small>&copy; 2025 Offstage Love Project</small>
+      </footer>
+
+</body>
+</html>
