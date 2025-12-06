@@ -1,0 +1,438 @@
+/* ===== PC版 文字サイズ 2倍拡大調整 ===== */
+/* style-pc.css の後に読み込んで上書き適用 */
+
+/* 基本フォントサイズ */
+html, body {
+  font-size: 28px; /* 14px → 28px */
+}
+
+/* ヘッダー */
+header {
+  font-size: 32px; /* 16px → 32px */
+  padding: 32px 32px 0; /* 余白も調整 */
+}
+
+/* メインコンテンツエリア */
+main {
+  padding: 80px 120px; /* 40px 60px → 80px 120px */
+  gap: 40px; /* 20px → 40px */
+}
+
+/* ボタン */
+.btn {
+  padding: 28px 40px; /* 14px 20px → 28px 40px */
+  border-radius: 24px; /* 12px → 24px */
+  font-size: 36px; /* 18px → 36px */
+}
+
+/* カード */
+.card {
+  border-radius: 28px; /* 14px → 28px */
+  padding: 24px; /* 12px → 24px */
+}
+
+/* サブタイトル・メタ情報 */
+.subtitle {
+  font-size: 24px; /* 12px → 24px */
+}
+
+.version {
+  font-size: 24px; /* 12px → 24px */
+}
+
+.meta {
+  font-size: 24px; /* 12px → 24px */
+}
+
+/* スタート画面 */
+.start-title {
+  font-size: clamp(64px, 8vw, 72px); /* 32px-36px → 64px-72px */
+}
+
+.start-sub {
+  font-size: 26px; /* 13px → 26px */
+  padding: 4px 20px; /* 2px 10px → 4px 20px */
+  border-radius: 24px; /* 12px → 24px */
+}
+
+.start-inner .tap {
+  font-size: 30px; /* 15px → 30px */
+  padding: 24px 44px; /* 12px 22px → 24px 44px */
+  border-radius: 24px; /* 12px → 24px */
+}
+
+.start-inner .hint {
+  font-size: 22px; /* 11px → 22px */
+  padding: 4px 12px; /* 2px 6px → 4px 12px */
+  border-radius: 12px; /* 6px → 12px */
+}
+
+/* ロゴ */
+.logo-img {
+  max-width: 800px; /* 400px → 800px */
+}
+
+/* タイトル画面ボタン */
+.title-btn-ghost {
+  width: 240px; /* 120px → 240px */
+  height: 240px; /* 120px → 240px */
+  border-radius: 32px; /* 16px → 32px */
+  font-size: 32px; /* 16px → 32px */
+}
+
+.title-btn-ghost span {
+  font-size: 28px; /* 14px → 28px */
+  margin-top: 12px; /* 6px → 12px */
+}
+
+/* Quick Actions */
+.qa-btn {
+  height: 112px; /* 56px → 112px */
+  border-radius: 28px; /* 14px → 28px */
+  font-size: 26px; /* 13px → 26px */
+}
+
+/* モーダル */
+.modal-card {
+  padding: 48px; /* 24px → 48px */
+  border-radius: 32px; /* 16px → 32px */
+}
+
+.modal-title {
+  font-size: 36px; /* 18px → 36px */
+}
+
+.modal-body {
+  font-size: 28px; /* 14px → 28px */
+}
+
+/* テキストボックス */
+.textbox {
+  padding: 48px 64px 120px 64px; /* 24px 32px 60px 32px → 48px 64px 120px 64px */
+  font-size: 36px; /* 18px → 36px */
+  border-radius: 32px; /* 16px → 32px */
+  border: 4px solid #F09199; /* 2px → 4px */
+}
+
+.name {
+  font-size: 36px; /* デフォルトから2倍 */
+  margin-bottom: 12px; /* 6px → 12px */
+}
+
+.name .kana {
+  font-size: 1.8em; /* 0.9em × 2 */
+  margin-left: 12px; /* 6px → 12px */
+}
+
+.text {
+  font-size: 36px; /* 18px → 36px */
+  line-height: 1.6;
+  min-height: 4lh;
+}
+
+/* フォントサイズプリセット調整 */
+.fs-s .text { font-size: 28px; } /* 14px → 28px */
+.fs-s .name { font-size: 28px; }
+
+.fs-m .text { font-size: 36px; } /* 18px → 36px */
+.fs-m .name { font-size: 36px; }
+
+.fs-l .text { font-size: 44px; } /* 22px → 44px */
+.fs-l .name { font-size: 44px; }
+
+.fs-xl .text { font-size: 52px; } /* 26px → 52px */
+.fs-xl .name { font-size: 52px; }
+
+/* 選択肢ボタン */
+.choice {
+  gap: 16px; /* 8px → 16px */
+  margin-top: 20px; /* 10px → 20px */
+}
+
+.choice .btn {
+  font-size: 32px; /* 推定16px → 32px */
+}
+
+/* 決定ボタン */
+.btn-confirm {
+  padding: 24px 0; /* 12px → 24px */
+  font-size: 36px; /* 18px → 36px */
+  bottom: 40px; /* 20px → 40px */
+}
+
+/* ミニボタン */
+.btn-mini {
+  padding: 20px 28px; /* 10px 14px → 20px 28px */
+  font-size: 28px; /* 14px → 28px */
+  border-radius: 20px; /* 10px → 20px */
+  border: 4px solid #444; /* 2px → 4px */
+}
+
+.textbox > .btn-mini {
+  left: 40px; /* 20px → 40px */
+  bottom: 40px; /* 20px → 40px */
+}
+
+/* ナビゲーションミニボタン */
+.textbox .nav-mini {
+  right: 40px; /* 20px → 40px */
+  bottom: 40px; /* 20px → 40px */
+  gap: 20px; /* 10px → 20px */
+}
+
+.textbox .nav-mini .btn-mini {
+  min-width: 160px; /* 80px → 160px */
+  padding: 20px 24px; /* 10px 12px → 20px 24px */
+  font-size: 28px; /* 14px → 28px */
+}
+
+/* メニューボタン */
+.menu-btn {
+  top: 40px; /* 20px → 40px */
+  right: 40px; /* 20px → 40px */
+  width: 96px; /* 48px → 96px */
+  height: 96px; /* 48px → 96px */
+  border-radius: 24px; /* 12px → 24px */
+  border: 4px solid #2c2c2c; /* 2px → 4px */
+  font-size: 40px; /* 20px → 40px */
+}
+
+/* HUD・デバッグ表示 */
+.hud, #aff-debug {
+  top: 40px; /* 20px → 40px */
+  left: 40px; /* 20px → 40px */
+  font-size: 28px; /* 14px → 28px */
+  padding: 24px 32px; /* 12px 16px → 24px 32px */
+  border-radius: 20px; /* 10px → 20px */
+  width: 400px; /* 200px → 400px */
+}
+
+#aff-debug .dbg-title {
+  font-size: 24px; /* 推定12px → 24px */
+}
+
+#aff-debug .ht-hearts {
+  font-size: 26px; /* 13px → 26px */
+  letter-spacing: 4px; /* 2px → 4px */
+}
+
+#aff-debug .ht-bar {
+  height: 12px; /* 6px → 12px */
+}
+
+#aff-debug .ht-bar .label {
+  top: -32px; /* -16px → -32px */
+  font-size: 20px; /* 10px → 20px */
+}
+
+#aff-debug .who {
+  min-width: 56px; /* 28px → 56px */
+  font-size: 28px; /* 推定14px → 28px */
+}
+
+/* ステータス画面 */
+.ht-hearts {
+  font-size: 36px; /* 18px → 36px */
+  letter-spacing: 4px; /* 2px → 4px */
+  margin: 4px 0 16px; /* 2px 0 8px → 4px 0 16px */
+}
+
+.ht-bar {
+  height: 20px; /* 10px → 20px */
+}
+
+.ht-bar .label {
+  right: 12px; /* 6px → 12px */
+  top: -36px; /* -18px → -36px */
+  font-size: 22px; /* 11px → 22px */
+}
+
+.ht-wrap.max::after {
+  right: 12px; /* 6px → 12px */
+  top: -32px; /* -16px → -32px */
+  font-size: 22px; /* 11px → 22px */
+  padding: 4px 12px; /* 2px 6px → 4px 12px */
+}
+
+/* リスト */
+.list {
+  gap: 16px; /* 8px → 16px */
+  margin-top: 16px; /* 8px → 16px */
+}
+
+.list-item {
+  gap: 4px; /* 2px → 4px */
+  padding: 20px; /* 10px → 20px */
+  border-radius: 20px; /* 10px → 20px */
+  font-size: 28px; /* 推定14px → 28px */
+}
+
+.list-item .meta {
+  font-size: 24px; /* 12px → 24px */
+}
+
+/* フォーム */
+.form {
+  gap: 16px; /* 8px → 16px */
+}
+
+.form label {
+  font-size: 24px; /* 12px → 24px */
+}
+
+.form input {
+  padding: 20px; /* 10px → 20px */
+  border-radius: 20px; /* 10px → 20px */
+  font-size: 28px; /* 推定14px → 28px */
+}
+
+/* テキストエリア */
+textarea {
+  height: 240px; /* 120px → 240px */
+  border-radius: 20px; /* 10px → 20px */
+  padding: 20px; /* 10px → 20px */
+  font-size: 24px; /* 12px → 24px */
+}
+
+.mono {
+  font-size: 24px; /* 12px → 24px */
+}
+
+/* 削除ボタン */
+.btn-del {
+  font-size: 24px; /* 12px → 24px */
+  padding: 4px 12px; /* 2px 6px → 4px 12px */
+  border-radius: 8px; /* 4px → 8px */
+}
+
+/* Result画面 */
+.result-title {
+  font-size: 36px; /* 18px → 36px */
+  margin-bottom: 12px; /* 6px → 12px */
+}
+
+.result-text {
+  font-size: 32px; /* 推定16px → 32px */
+}
+
+.result-label {
+  font-size: 28px; /* 推定14px → 28px */
+  margin-bottom: 12px; /* 6px → 12px */
+}
+
+.result-target {
+  font-size: 32px; /* 16px → 32px */
+}
+
+.result-aff {
+  font-size: 28px; /* 推定14px → 28px */
+}
+
+/* Tracks(音楽リスト) */
+.tracks-card {
+  padding: 32px 32px 40px; /* 16px 16px 20px → 32px 32px 40px */
+}
+
+.tracks-cover {
+  width: 112px; /* 56px → 112px */
+  height: 112px; /* 56px → 112px */
+  border-radius: 36px; /* 18px → 36px */
+  font-size: 36px; /* 18px → 36px */
+}
+
+.tracks-title-main {
+  font-size: 28px; /* 14px → 28px */
+}
+
+.tracks-sub {
+  font-size: 22px; /* 11px → 22px */
+}
+
+.np-title {
+  font-size: 28px; /* 14px → 28px */
+}
+
+.np-artist {
+  font-size: 22px; /* 11px → 22px */
+}
+
+.np-time {
+  font-size: 20px; /* 10px → 20px */
+  min-width: 64px; /* 32px → 64px */
+}
+
+#np-seek, #np-volume {
+  height: 8px; /* 4px → 8px */
+}
+
+#np-seek::-webkit-slider-thumb,
+#np-volume::-webkit-slider-thumb {
+  width: 24px; /* 12px → 24px */
+  height: 24px; /* 12px → 24px */
+}
+
+#np-seek::-moz-range-thumb,
+#np-volume::-moz-range-thumb {
+  width: 24px; /* 12px → 24px */
+  height: 24px; /* 12px → 24px */
+}
+
+.np-btn {
+  width: 64px; /* 32px → 64px */
+  height: 64px; /* 32px → 64px */
+  font-size: 32px; /* 16px → 32px */
+}
+
+.np-btn-main {
+  width: 112px; /* 56px → 112px */
+  height: 112px; /* 56px → 112px */
+  font-size: 52px; /* 26px → 52px */
+}
+
+.np-vol-icon {
+  font-size: 28px; /* 14px → 28px */
+}
+
+.trk-mode-btn {
+  padding: 12px 20px; /* 6px 10px → 12px 20px */
+  font-size: 22px; /* 11px → 22px */
+}
+
+.track-row {
+  padding: 18px 20px; /* 9px 10px → 18px 20px */
+  border-radius: 24px; /* 12px → 24px */
+  margin-bottom: 12px; /* 6px → 12px */
+  gap: 20px; /* 10px → 20px */
+}
+
+.track-play-btn {
+  width: 64px; /* 32px → 64px */
+  height: 64px; /* 32px → 64px */
+  font-size: 32px; /* 16px → 32px */
+}
+
+.track-title {
+  font-size: 26px; /* 13px → 26px */
+}
+
+.track-meta {
+  font-size: 22px; /* 11px → 22px */
+}
+
+.track-number {
+  width: 40px; /* 20px → 40px */
+  font-size: 24px; /* 12px → 24px */
+  margin-right: 20px; /* 10px → 20px */
+}
+
+.track-wave {
+  width: 32px; /* 16px → 32px */
+  height: 32px; /* 16px → 32px */
+}
+
+/* 次へボタン（#btn-next が存在する場合の調整） */
+#btn-next {
+  padding: 24px 0; /* 12px → 24px */
+  font-size: 30px; /* 15px → 30px */
+  border: 4px solid #F09199; /* 2px → 4px */
+}
