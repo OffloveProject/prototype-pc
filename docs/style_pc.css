@@ -194,8 +194,8 @@ body.modal-open .modal * {
 /* ==== Start Screen ====↓↓↓ここから */
   .start-screen{
 /* PC向け：全画面表示 */
-  width: 100%;
-  max-width: 1920px;
+  /*width: 100%;
+  max-width: 1920px; ← ※PC用※ これをコメントアウトして、position: fixed; inset: 0; に変更 */
   margin: 0 auto;
   position: absolute; inset: 0; z-index: 1000;
   display: grid; place-items: center;
