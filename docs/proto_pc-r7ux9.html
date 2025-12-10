@@ -1142,7 +1142,12 @@ function renderSaveList(){
         showConfirm(
           `スロット No.${i} にセーブしますか？`,
           () => {
-          const payload = { savedAt: Date.now(), state:{}, profile, settings };
+          const payload = { savedAt: Date.now(), state:{
+      sceneId: state.sceneId, cursor: state.cursor,
+      vars: state.vars, log: state.log, history: state.history,
+      seenStills: state.seenStills, affection: state.affection,
+      affFine: state.affFine
+    }, profile, settings };
           localStorage.setItem(SLOT_PREFIX+i, JSON.stringify(payload));
           renderSaveList();
           updateContinueButton(); // ← Save リストの保存直後にContinueボタンのアクティブ/非アクティブ更新
@@ -2852,5 +2857,6 @@ if (volSlider && volIcon) {
 
 </body>
 </html>
+
 
 
